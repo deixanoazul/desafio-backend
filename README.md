@@ -12,8 +12,9 @@
 ## Requisitos do desafio
 
 - Utilizar PHP, caso se sinta confortável, utilize o Láravel
-- O código deve seguir o padrão PSR2;
+- O código deve seguir o padrão PSR4;
 - Adicionar no README instruções de como executar o projeto.
+- A API deve receber e retornar dados no formato JSON.
 
 ## Diferenciais
 
@@ -41,7 +42,7 @@ Nessa etapa daremos algumas premissas que devem ser seguidas.
 Nessa etapa você precisará criar a modelagem e lógica para implementar as funcionalidades abaixo:
 
 - Criar um endpoint ou endpoints onde é possível associar uma operação de débito, crédito ou estorno para o usuário;
-- Criar um endpoint onde seja possível visualizar toda a movimentação (páginada) do usuários mais as suas informações pessoais;
+- Criar um endpoint onde seja possível visualizar todas as transações (páginada) do usuários mais as suas informações pessoais;
 - Criar um endpoint onde seja possível excluir uma movimentação relacionada a um usuário;
 
 
@@ -49,13 +50,13 @@ Nessa etapa você precisará criar a modelagem e lógica para implementar as fun
 Nessa etapa serão itens onde veremos como você pensou e como chegou ao resultado final.
 
 - Adicionar dentro do usuário um campo para saldo inicial, e criar um endpoint para alterar esse valor;
-- Criar um endpoint com a soma de todas as movimentações (débito, crédito e estorno) mais o saldo inicial do usuário;
-- No endpoint que exclui um usuário, adicionar a funcionalidade que agora não será mais possível excluir um usuário que tenha qualquer tipo de movimentação ou saldo;
-- No endpoint que cadastra usuário, adicionar a funcionalidade que apenas maiores de 18 anos podem criar uma conta;
-- No endpoint que exporta o arquivo CSV criar um cabeçalho com os dados do cliente e o seu saldo atual;
+- Criar um endpoint com a soma de todas as transações (débito, crédito e estorno);
+- No endpoint que exclui um usuário, adicionar a funcionalidade que agora não será mais possível excluir um usuário que tenha qualquer tipo de transação associada ou saldo;
+- No endpoint que cadastra usuário, adicionar a funcionalidade que apenas maiores de 21 anos podem criar uma conta;
 
-### Etapa 4 -Itens Não Obrigatórios
+### Fase 4 -Itens Não Obrigatórios
 - Criar validações com base na Request;
+- Implementar ao menos uma camada entre o controller e o model
 - Utilizar cache para otimizar as consultas e buscas;
 - Criar Seeders ou Inicializadores de dados para o usuários e suas Transações;
 - Criar os métodos baseados em algum método de autênticação.
