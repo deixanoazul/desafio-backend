@@ -2,7 +2,7 @@
 
 # Desafio Back-End - Deixa no Azul
 
-## Pré requisitos
+## Pré-requisitos
 
 - Lógica de programação;
 - Conhecimentos sobre Banco de dados;
@@ -20,10 +20,7 @@
 
 - Utilizar o Laravel(7.4)
 - Código limpo
-
-
-## Ao Concluir
-Crie um Fork e submeta uma Pull Request ao Github com o seu desafio. Após isso envie um e-mail para matheus.morais@deixanoazul.com.br, com o assunto 'DESAFIO BACK-END' e currículo em anexo. Recomenda-se criar o fork antes e realizar commits de acordo com a conclusão das fases.
+- Criar o fork no início do desenvolvimento e realizar commits de acordo com a conclusão das fases.
 
 
 ### Fase 1 - Usuários
@@ -65,3 +62,6 @@ Nessa fase serão implementadas novas funcionalidades no sistema:
 - Criar os métodos baseados em algum método de autenticação;
 - Documentação dos endpoints;
 - Utilizar commits de acordo com cada fase do desenvolvimento.
+
+## Ao Concluir
+Crie um fork e submeta uma pull request ao GitHub com o seu desafio. Após isso envie um e-mail para 'matheus.morais@deixanoazul.com.br', com o assunto 'DESAFIO BACK-END' e currículo em anexo.
