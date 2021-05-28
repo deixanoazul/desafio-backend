@@ -2,6 +2,10 @@
 
 # Desafio Back-End - Deixa no Azul
 
+Esse desafio é destinado á todos os níveis e não é exigido que você consiga realizar esse desafio por completo.
+
+Sua avaliação será dada pelas fases que conseguir entregar e a forma com que foram desenvolvidas.
+
 ## Pré-requisitos
 
 - Lógica de programação;
@@ -21,6 +25,9 @@
 - Utilizar o Laravel(7.4)
 - Código limpo
 - Criar o fork no início do desenvolvimento e realizar commits de acordo com a conclusão das fases.
+
+
+Caso não consiga fazer todas as fases do desafio tudo bem
 
 
 ### Fase 1 - Usuários
