@@ -6,7 +6,6 @@ use App\Api\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Resources\UserResource;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
@@ -40,9 +39,9 @@ class UserController extends Controller
             return new UserResource($user);
         } catch (\Exception $e) {
             if (config('app.debug')) {
-                return response()->json(ApiResponse::errorMessage($e->getMessage(), $e->getCode()));
+                return ApiResponse::errorMessage($e->getMessage(), $e->getCode());
             } else {
-                return response()->json(ApiResponse::errorMessage('Houve um erro ao cadastrar o usuário! Contate a administração para investigar o problema.', 500));
+                return ApiResponse::errorMessage('Houve um erro ao cadastrar o usuário! Contate a administração para investigar o problema.', 500);
             }
         }
     }
@@ -66,6 +65,18 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $user = User::findOrFail($id);
+
+            $user->delete();
+            
+            return ApiResponse::successMessage('O usuário foi removido com sucesso!', 204);
+        } catch (\Exception $e) {
+            if (config('app.debug')) {
+                return ApiResponse::errorMessage($e->getMessage(), $e->getCode());
+            } else {
+                return ApiResponse::errorMessage('Houve um erro ao remover o usuário! Contate a administração para investigar o problema.', 500);
+            }
+        }
     }
 }
