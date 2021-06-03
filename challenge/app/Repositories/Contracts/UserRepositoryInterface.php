@@ -9,5 +9,5 @@ interface UserRepositoryInterface
     public function update (array $data);
     public function delete ();
     public function paginate (int $integer);
-    public function orderBy (string $column, $clause = 'DESC');
+    public function orderBy ($column, $clause = 'DESC');
 }

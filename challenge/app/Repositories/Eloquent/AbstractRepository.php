@@ -2,9 +2,6 @@
 
 namespace App\Repositories\Eloquent;
 
-use App\Models\User;
-use Illuminate\Support\Arr;
-
 abstract class AbstractRepository 
 {
     protected $model;
@@ -34,7 +31,7 @@ abstract class AbstractRepository
         return $this->model->paginate($integer);
     }
 
-    public function orderBy (string $column, $clause = 'DESC')
+    public function orderBy ($column, $clause = 'DESC')
     {
         return $this->model->orderBy($column, $clause);
     }

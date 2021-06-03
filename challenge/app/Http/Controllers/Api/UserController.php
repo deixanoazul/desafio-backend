@@ -8,6 +8,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\Eloquent\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 
@@ -20,11 +21,16 @@ class UserController extends Controller
         $this->user = $user;
     }
 
-    public function index (): UserCollection
-    {
-        $users = $this->user->paginate(10)->orderBy('created_at', 'desc');
+    public function index ()
+    {   
+        try {
+            $users = $this->user->orderBy('created_at', 'desc')->paginate(1);
 
-        return new UserCollection($users);
+            return new UserCollection($users);
+            
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
     }
     /**
      * Store a newly created resource in storage.
@@ -34,19 +40,12 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): JsonResponse
     {
-        $data = [
-            'name'    => $request->name,
-            'email'   => $request->email,
-            'cpf'     => $request->cpf,
-            'password'=> bcrypt($request->password),
-            'birthday'=> $request->birthday
-        ];
-
+        $data = $request->all();
+        
         try {
-            
             $user = $this->user->create($data);
 
-            $user->cpf = $this->formatCpf($user->cpf);
+            $user = new UserResource($user);
 
             return response()->json([
                 'data' => [
@@ -65,16 +64,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(int $id): JsonResponse
+    public function show(int $id)
     {
         try {
             $user = $this->user->findOrFail($id);
 
-            $user->cpf = $this->formatCpf($user->cpf);
-
-            return response()->json([
-                'data' => $user
-            ], 200);
+            $user = new UserResource($user);
+            return response()->json(['data' => $user], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 422);
         }
@@ -108,7 +104,7 @@ class UserController extends Controller
             $user = $this->user->findOrFail($id);
             $user->update($data);
 
-            $user->cpf = $this->formatCpf($user->cpf);
+            $user = new UserResource($user);
 
             return response()->json(['data' => [
                 'message' => 'User updated successfully!', 
@@ -137,15 +133,5 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 422);
         }
-    }
-
-    private function formatCpf($cpf)
-    {
-        $rep = '.';
-        $cpf = substr_replace ( $cpf, $rep, 3, 0 );
-        $cpf = substr_replace ( $cpf, $rep, 7, 0 );
-        $rep = '-';
-
-        return $cpf = substr_replace ( $cpf, $rep, 11, 0 );
     }
 }
