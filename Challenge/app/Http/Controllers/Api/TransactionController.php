@@ -6,7 +6,7 @@ use App\Api\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TransactionResource;
 use App\Models\Transaction;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
@@ -57,5 +57,20 @@ class TransactionController extends Controller
                 return ApiResponse::errorMessage('Houve um erro ao deletar esta operação. Contate a administração para investigar o problema.', 500);
             }
         }
+    }
+
+    /**
+     *  Sum all user transactions.
+     * 
+     *  @param  int  $id;
+     *  @return \Illuminate\Http\Response
+     */
+    public function sumAllUserTransactions($id)
+    {
+        $result = DB::table('transactions')->where('user_id', $id)->selectRaw("
+            SUM(CASE type WHEN 'credit' THEN amount WHEN 'chargeback' THEN amount WHEN 'debt' THEN amount * -1 END) as total"
+        )->first();
+
+        return response()->json(['data' => ['total' => $result->total]], 200);
     }
 }
