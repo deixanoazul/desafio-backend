@@ -20,7 +20,8 @@ class User extends Authenticatable
         'email',
         'password',
         'CPF',
-        'birthday'
+        'birthday',
+        'opening_amount',
     ];
 
     /**

@@ -10,6 +10,7 @@ Route::prefix('v1')->group(function() {
         Route::post('/', [UserController::class, 'store']);
         Route::get('/{id}', [UserController::class, 'show']);
         Route::delete('/{id}', [UserController::class, 'destroy']);
+        Route::put('/{id}', [UserController::class, 'changeOpeningAmount']);
 
         Route::get('/{id}/transactions', [TransactionController::class, 'index']);
         Route::get('/{id}/transactions-with-infos', [TransactionController::class, 'listTransactionsWithUserInformations']);
