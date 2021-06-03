@@ -60,6 +60,8 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
-        ]
+        ],
+        "test": "phpunit --colors=always --verbose",
+        "coverage": "phpunit --coverage-html ./coverage"
     }
 }
