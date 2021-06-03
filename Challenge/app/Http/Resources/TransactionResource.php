@@ -19,6 +19,7 @@ class TransactionResource extends JsonResource
             'type' => $this->type,
             'amount' => $this->amount,
             'user_id' => $this->user_id,
+            'user' => new UserResource($this->user),
         ];
     }
 }

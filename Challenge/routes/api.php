@@ -12,5 +12,6 @@ Route::prefix('v1')->group(function() {
         Route::delete('/{id}', [UserController::class, 'destroy']);
 
         Route::get('/{id}/transactions', [TransactionController::class, 'index']);
+        Route::get('/{id}/transactions-with-infos', [TransactionController::class, 'listTransactionsWithUserInformations']);
     });
 });
