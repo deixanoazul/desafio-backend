@@ -23,11 +23,13 @@ class UserStoreRequest extends FormRequest
      */
     public function rules()
     {
+        $before = \Carbon\Carbon::now()->subYears(21)->format('Y-m-d');
+
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
-            'birthday' => ['required', 'date'],
+            'birthday' => ['required', 'date', 'before_or_equal:' . $before],
             'CPF' => ['required', 'string', 'unique:users'],
         ];
     }
