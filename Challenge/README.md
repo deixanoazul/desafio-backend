@@ -28,6 +28,7 @@
 - Don't allow users under 21 years old to create an account
 - Custom request validations
 - Database seeders
+- API Authentication with JWT
 
 <a name="instalation">**Installation**</a><br>
 - Clone the repository<br>
@@ -49,6 +50,10 @@ $ cp .env.example .env
 - Generate a new application key<br>
 ```
 $ php artisan key:generate
+```
+- Generate a new JWT key<br>
+```
+$ php artisan jwt:secret
 ```
 - Run the database migrations (Set the database connection in .env before migrating)<br>
 ```
