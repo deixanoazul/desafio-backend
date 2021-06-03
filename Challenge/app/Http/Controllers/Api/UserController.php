@@ -66,9 +66,17 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        try {
-            $user = User::findOrFail($id);
+        $user = User::findOrFail($id);
+        $transactions_count = $user->transactions()->count();
+        $opening_amount = $user->opening_amount;
 
+        if ($transactions_count > 0) {
+            return ApiResponse::errorMessage('O usuário possui transações em sua conta. Não é possível removê-lo do sistema!', 405);
+        } elseif ($opening_amount > 0 || $opening_amount != null) {
+            return ApiResponse::errorMessage('O usuário possui saldo em sua conta. Não é possível removê-lo do sistema!', 405);
+        }
+
+        try {
             $user->delete();
             
             return ApiResponse::successMessage('O usuário foi removido com sucesso!', 204);
