@@ -50,7 +50,7 @@ Nesta fase serão implementados as Transações e seus respectivos endpoints:
 
 - Criar um endpoint ou endpoints onde é possível associar uma operação de débito, crédito ou estorno para o usuário;
 - Criar um endpoint onde seja possível visualizar todas as transações (páginada) do usuários mais as suas informações pessoais;
-- Criar um endpoint onde seja possível excluir uma movimentação relacionada a um usuário.
+- Criar um endpoint onde seja possível excluir uma transação relacionada a um usuário.
 
 
 ### Fase 3 - Nova Funcionalidades
