@@ -1,7 +1,12 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\Users\UserController;
+
+use App\Http\Controllers\Auth\SignInController;
+use App\Http\Controllers\Auth\SignUpController;
+use App\Http\Controllers\Auth\SignOutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +19,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('/sign-in', SignInController::class);
+Route::post('/sign-up', SignUpController::class);
+Route::post('/sign-out', SignOutController::class)->middleware('auth');
+
+Route::get('/users', [UserController::class, 'index']);
+Route::get('/users/{userId}', [UserController::class, 'show']);
+Route::delete('/users/{userId}', [UserController::class, 'destroy']);
