@@ -32,6 +32,10 @@ class UserController extends Controller
     {
         try {
             $data = $request->validated();
+
+            if ($data['birthday'] > \Carbon\Carbon::now()->subYears(21)->format('Y-m-d')) {
+                return ApiResponse::errorMessage('Apenas usuários maiores de 21 podem se registrar', 400);
+            }
     
             $data['password'] = Hash::make($request->password);
     
@@ -71,9 +75,11 @@ class UserController extends Controller
         $opening_amount = $user->opening_amount;
 
         if ($transactions_count > 0) {
-            return ApiResponse::errorMessage('O usuário possui transações em sua conta. Não é possível removê-lo do sistema!', 405);
-        } elseif ($opening_amount > 0 || $opening_amount != null) {
-            return ApiResponse::errorMessage('O usuário possui saldo em sua conta. Não é possível removê-lo do sistema!', 405);
+            return ApiResponse::errorMessage('O usuário possui transações em sua conta. Não é possível removê-lo do sistema!', 400);
+        } 
+
+        if ($opening_amount != 0 || $opening_amount != null) {
+            return ApiResponse::errorMessage('O usuário possui saldo em sua conta. Não é possível removê-lo do sistema!', 400);
         }
 
         try {

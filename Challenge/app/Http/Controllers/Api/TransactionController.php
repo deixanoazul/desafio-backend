@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Api\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TransactionStoreRequest;
 use App\Http\Resources\TransactionResource;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
@@ -18,18 +19,31 @@ class TransactionController extends Controller
      */
     public function index($user_id)
     {
-        return TransactionResource::collection(Transaction::where('user_id', $user_id)->get());
+        return TransactionResource::collection(Transaction::with('user')->where('user_id', $user_id)->paginate(5));
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $user_id;
-     * @return \Illuminate\Http\Response
+     *  Store a transaction associating an user.
+     *  
+     *  @param \App\Http\Requests\TransactionStoreRequest $request;
      */
-    public function listTransactionsWithUserInformations($user_id)
+    function store(TransactionStoreRequest $request, $user_id)
     {
-        return TransactionResource::collection(Transaction::with('user')->where('user_id', $user_id)->paginate(5));
+        try {
+            $data = $request->validated();
+
+            $data['user_id'] = $user_id;
+
+            $transaction = Transaction::create($data);
+
+            return new TransactionResource($transaction);
+        } catch (\Exception $e) {
+            if (config('app.debug')) {
+                return ApiResponse::errorMessage($e->getMessage(), $e->getCode());
+            } else {
+                return ApiResponse::errorMessage('Houve um erro ao registrar esta operação. Contate a administração para investigar o problema.', 500);
+            }
+        }
     }
 
     /**

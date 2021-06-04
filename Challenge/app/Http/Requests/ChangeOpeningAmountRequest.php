@@ -24,7 +24,7 @@ class ChangeOpeningAmountRequest extends FormRequest
     public function rules()
     {
         return [
-            'opening_amount' => ['required', 'numeric'],
+            'opening_amount' => ['required', 'integer'],
         ];
     }
 }

@@ -14,10 +14,10 @@ Route::group(['middleware' => ['apiJWT']], function() {
             Route::post('/', [UserController::class, 'store']);
             Route::get('/{id}', [UserController::class, 'show']);
             Route::delete('/{id}', [UserController::class, 'destroy']);
-            Route::put('/{id}', [UserController::class, 'changeOpeningAmount']);
+            Route::put('/{id}/change-amount', [UserController::class, 'changeOpeningAmount']);
 
             Route::get('/{id}/transactions', [TransactionController::class, 'index']);
-            Route::get('/{id}/transactions-with-infos', [TransactionController::class, 'listTransactionsWithUserInformations']);
+            Route::post('/{id}/transactions', [TransactionController::class, 'store']);
             Route::get('/{id}/transactions-sum', [TransactionController::class, 'sumAllUserTransactions']);
             Route::delete('/{user_id}/transactions/{transaction_id}', [TransactionController::class, 'destroy']);
         });

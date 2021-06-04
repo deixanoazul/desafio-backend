@@ -1,4 +1,4 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://github.com/deixanoazul/desafio-backend/raw/main/DNA.png" width="400"></a></p>
+<p align="center"><a href="https://github.com/deixanoazul/desafio-backend/blob/main/DNA.png?raw=true" target="_blank"><img src="https://github.com/deixanoazul/desafio-backend/raw/main/DNA.png" width="200"></a></p>
 
 
 # Desafio Back-End - Deixa no Azul
@@ -37,7 +37,7 @@ $ git clone https://github.com/felipebrsk/desafio-backend
 ```
 - Switch to the repo folder<br>
 ```
-$ cd Challenge
+$ cd desafio-backend/Challenge
 ```
 - Install all the dependencies using composer<br>
 ```
@@ -77,15 +77,22 @@ You can call API routes in http://localhost:8000/v1/users
 
 <a name="docs">**QuickDocs**</a>
 
-- `POST` http://localhost:8000/v1/users - register users
+- `POST` http://localhost:8000/v1/users - Register users
 - `GET` http://localhost:8000/v1/users - List users ordered by desc
 - `GET` http://localhost:8000/v1/users/{id} - List a specific user by id
 - `DELETE` http://localhost:8000/v1/users/{id} - Delete a specific user by id
-- `PUT` http://localhost:8000/v1/users{id} - Change opening amount of an user
+- `PUT` http://localhost:8000/v1/users/{id}/change-amount - Change opening amount of an user
 
 <br/>
 
-- `GET` http://localhost:8000/v1/users/{id}/transactions - Get all associated transactions with the user
-- `GET` http://localhost:8000/v1/users/{id}/transactions-with-infos - Get all paginated transactions associated to user with his informations 
+- `GET` http://localhost:8000/v1/users/{id}/transactions - Get all paginated transactions associated to user with his informations 
+- `POST` http://localhost:8000/v1/users/{id}/transactions - Store a new operation relating with user
 - `GET` http://localhost:8000/v1/users/{id}/transactions-sum - Get the sum of all user operations
 - `DELETE` http://localhost:8000/v1/users/{user_id}/transactions/{transaction_id} - Delete a specific transaction associated to user
+
+<br/>
+
+- `POST` http://localhost:8000/v1/auth/login - Authenticate route to get token access
+- `POST` http://localhost:8000/v1/auth/refresh - Refresh a token
+- `POST` http://localhost:8000/v1/auth/me - Get the authenticated user logged in
+- `POST` http://localhost:8000/v1/auth/logout - Finish session token 
