@@ -77,6 +77,11 @@ You can call API routes in http://localhost:8000/v1/users
 
 <a name="docs">**QuickDocs**</a>
 
+There's a postman quick access to check out all routes and test application inside
+`docs => postman => deixanoazul-challenge.postman_collection`
+
+<br/>
+
 - `POST` http://localhost:8000/v1/users - Register users
 - `GET` http://localhost:8000/v1/users - List users ordered by desc
 - `GET` http://localhost:8000/v1/users/{id} - List a specific user by id
