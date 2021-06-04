@@ -8,7 +8,6 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Repositories\Contracts\UserRepositoryInterface;
-use App\Repositories\Eloquent\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 
@@ -22,12 +21,12 @@ class UserController extends Controller
     }
 
     public function index ()
-    {   
+    {
         try {
             $users = $this->user->orderBy('created_at', 'desc')->paginate(1);
 
             return new UserCollection($users);
-            
+
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
@@ -36,22 +35,20 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function store(StoreUserRequest $request): JsonResponse
     {
         $data = $request->all();
-        
+
         try {
             $user = $this->user->create($data);
 
             $user = new UserResource($user);
 
             return response()->json([
-                'data' => [
-                    'message' => 'User created successfully!',
-                    'user' => $user
-                ]], 201);
+                'data' => ['message' => 'User created successfully!', 'user' => $user]
+            ], 201);
 
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
@@ -62,9 +59,9 @@ class UserController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function show(int $id)
+    public function show(int $id): JsonResponse
     {
         try {
             $user = $this->user->findOrFail($id);
@@ -81,9 +78,9 @@ class UserController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, $id)
     {
         $data = $request->all();
 
@@ -100,14 +97,13 @@ class UserController extends Controller
         }
 
         try {
-
             $user = $this->user->findOrFail($id);
             $user->update($data);
 
             $user = new UserResource($user);
 
             return response()->json(['data' => [
-                'message' => 'User updated successfully!', 
+                'message' => 'User updated successfully!',
                 'user' => $user]
             ], 200);
 

@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Eloquent;
 
-abstract class AbstractRepository 
+abstract class AbstractRepository
 {
     protected $model;
 
@@ -11,16 +11,16 @@ abstract class AbstractRepository
         $this->model = $this->resolveModel();
     }
 
-    public function findOrFail (int $id) 
+    public function findOrFail (int $id)
     {
         return $this->model->findOrFail($id);
     }
 
-    public function create ($data) 
+    public function create ($data)
     {
         return $this->model->create($data);
     }
-    
+
     public function update (array $data)
     {
         return $this->model->update($data);
@@ -41,7 +41,8 @@ abstract class AbstractRepository
         return $this->model->update();
     }
 
-    protected function resolveModel () 
+
+    protected function resolveModel ()
     {
         return app($this->model);
     }
