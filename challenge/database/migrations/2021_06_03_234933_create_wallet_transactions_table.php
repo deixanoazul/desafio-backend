@@ -18,7 +18,7 @@ class CreateWalletTransactionsTable extends Migration
             $table->unsignedBigInteger('wallet_id');
 
             $table->decimal('amount');
-            $table->enum('action', ['debit', 'credit', 'reverse']);
+            $table->enum('action', ['debit', 'credit', 'chargeback']);
 
             $table->foreign('wallet_id')->references('id')->on('wallets')->onDelete('cascade');
             $table->timestamps();

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\CreatingUserFailedException;
 use App\Http\Controllers\Controller;
+use App\Repositories\Eloquent\UserRepository;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
-use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,7 +16,7 @@ class UserController extends Controller
 {
     private $user;
 
-    public function __construct(UserRepositoryInterface $user)
+    public function __construct(UserRepository $user)
     {
         $this->user = $user;
     }
@@ -42,14 +43,15 @@ class UserController extends Controller
         $data = $request->all();
 
         try {
-            $user = $this->user->create($data);
-
+            $user = $this->user->createUser($data);
             $user = new UserResource($user);
 
             return response()->json([
                 'data' => ['message' => 'User created successfully!', 'user' => $user]
             ], 201);
 
+        } catch (CreatingUserFailedException $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], $e->getCode());
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }

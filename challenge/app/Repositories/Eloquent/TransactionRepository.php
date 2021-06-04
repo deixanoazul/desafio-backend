@@ -2,25 +2,29 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Exceptions\PaymentDeniedException;
 use App\Models\Transactions\Transaction;
 use App\Models\Transactions\Wallet;
 use App\Repositories\Contracts\TransactionRepositoryInterface;
 
-class TransactionRepository extends AbstractRepository implements TransactionRepositoryInterface
+class TransactionRepository extends AbstractRepository
 {
     protected $model = Transaction::class;
 
     private $wallet = Wallet::class;
 
+    /**
+     * @throws PaymentDeniedException
+     */
     public function handle(array $data)
     {
         if (!$this->userCanPayTheAmount($data)) {
-            return response()->json(['message' => 'User does not have enough money for this transaction'], 401);
+            throw new PaymentDeniedException ('User does not have enough money for this transaction', 401);
         }
         return $this->makeTransaction($data);
     }
 
-    public function makeTransaction($data)
+    private function makeTransaction($data)
     {
         $payload = [
             'wallet_id' => $data['wallet_id'],
@@ -28,13 +32,13 @@ class TransactionRepository extends AbstractRepository implements TransactionRep
             'action' => $data['action']
         ];
 
-        return $this->model->create($payload);
+        return $this::create($payload);
     }
 
     private function userCanPayTheAmount($data): bool
     {
         if ($data['action'] = 1) {
-            $wallet = $this->wallet->findOrFail($data['wallet_id']);
+            $wallet = $this->wallet::findOrFail($data['wallet_id']);
 
             if ($wallet->balance < $data['amount']) {
                 return false;

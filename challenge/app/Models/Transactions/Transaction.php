@@ -12,7 +12,7 @@ class Transaction extends Model
     protected $table = 'wallet_transactions';
 
     protected $fillable = [
-        'wallet_id', 'amount', 'type'
+        'wallet_id', 'amount', 'action'
     ];
 
     public function wallet()
