@@ -5,9 +5,14 @@ namespace App\Repositories;
 use App\Models\User;
 use App\Exceptions\Users\UserNotFoundException;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class UserRepository {
+    /**
+     * The number of users per page.
+     */
+    const PER_PAGE = 15;
+
     /**
      * Create a user.
      *
@@ -19,12 +24,13 @@ class UserRepository {
     }
 
     /**
-     * Get all users sorted by creation date.
+     * Get all users sorted by creation date with pagination.
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function all (): Collection {
-        return User::latest()->get();
+    public function all (): LengthAwarePaginator {
+        return User::latest()
+            ->paginate(UserRepository::PER_PAGE);
     }
 
     /**
@@ -43,7 +49,7 @@ class UserRepository {
      * @param string $userId
      * @throws \App\Exceptions\Users\UserNotFoundException
      */
-    public function delete (string $userId) {
+    public function deleteById (string $userId): void {
         $deleted = User::where('id', $userId)->delete();
 
         if ($deleted === 0) {
