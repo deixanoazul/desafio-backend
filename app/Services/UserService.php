@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\Users\UserHasBalanceException;
 use App\Exceptions\Users\UserHasTransactionException;
 use App\Repositories\TransactionRepository;
 use App\Repositories\UserRepository;
@@ -50,6 +51,20 @@ class UserService {
     }
 
     /**
+     * @throws \App\Exceptions\Users\UserHasBalanceException
+     * @throws \App\Exceptions\Users\UserHasTransactionException
+     */
+    protected function assertCanDelete (string $userId) {
+        if ($this->hasBalanceById($userId)) {
+            throw new UserHasBalanceException();
+        }
+
+        if ($this->hasTransactionById($userId)) {
+            throw new UserHasTransactionException();
+        }
+    }
+
+    /**
      * Assert can create user with specified attributes.
      *
      * @throws \App\Exceptions\Users\UnderageUserException
@@ -63,12 +78,17 @@ class UserService {
     }
 
     /**
-     * @throws \App\Exceptions\Users\UserHasTransactionException
+     * Check if user has balance.
+     *
+     * @param string $userId
+     * @return bool
      */
-    protected function assertCanDelete (string $userId) {
-        if ($this->transactions->existsByUserId($userId)) {
-            throw new UserHasTransactionException();
-        }
+    protected function hasBalanceById (string $userId): bool {
+        return $this->users->getBalanceById($userId) > 0;
+    }
+
+    protected function hasTransactionById (string $userId): bool {
+        return $this->transactions->existsByUserId($userId);
     }
 
     /**

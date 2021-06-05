@@ -17,7 +17,7 @@ class DestroyUserTest extends TestCase {
      * Test if destroy user responds with 200 status code.
      */
     public function testDestroyUserRespondsWithOk () {
-        $user = $this->createDummyUser();
+        $user = $this->createDummyUserWithoutBalance();
 
         $this->deleteJson("/api/users/$user->id")
             ->assertOk();
@@ -35,7 +35,7 @@ class DestroyUserTest extends TestCase {
      * Test if destroy user removes it from database.
      */
     public function testDestroyUserRemovesItFromDatabase () {
-        $user = $this->createDummyUser();
+        $user = $this->createDummyUserWithoutBalance();
 
         $this->deleteJson("/api/users/$user->id");
 
@@ -51,6 +51,18 @@ class DestroyUserTest extends TestCase {
         $user = $this->createDummyUser();
 
         $this->createDummyTransactionsTo(5, $user->id);
+
+        $this->deleteJson("/api/users/$user->id")
+            ->assertForbidden();
+    }
+
+    /**
+     * Test if destroy user responds with forbidden if user has balance.
+     */
+    public function testDestroyUserRespondsWithForbiddenIfUserHasBalance () {
+        $user = $this->createDummyUser([
+            'balance' => 1000,
+        ]);
 
         $this->deleteJson("/api/users/$user->id")
             ->assertForbidden();

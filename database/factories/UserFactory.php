@@ -26,3 +26,9 @@ $factory->define(User::class, function (Faker $faker) {
         'password' => bcrypt('password'),
     ];
 });
+
+$factory->state(User::class, 'without-balance', function () {
+    return [
+        'balance' => 0,
+    ];
+});

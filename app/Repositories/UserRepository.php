@@ -71,4 +71,14 @@ class UserRepository {
             throw new UserNotFoundException();
         }
     }
+
+    /**
+     * Get user balance by id.
+     *
+     * @param string $userId
+     * @return mixed
+     */
+    public function getBalanceById (string $userId) {
+        return User::where('id', $userId)->value('balance');
+    }
 }
