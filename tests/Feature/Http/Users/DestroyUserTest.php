@@ -4,12 +4,14 @@ namespace Tests\Feature\Http\Users;
 
 use Tests\TestCase;
 use Tests\HasDummyUser;
+use Tests\HasDummyTransaction;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class DestroyUserTest extends TestCase {
     use DatabaseMigrations,
-        HasDummyUser;
+        HasDummyUser,
+        HasDummyTransaction;
 
     /**
      * Test if destroy user responds with 200 status code.
@@ -40,5 +42,17 @@ class DestroyUserTest extends TestCase {
         $this->assertDatabaseMissing('users', [
             'id' => $user->id,
         ]);
+    }
+
+    /**
+     * Test if destroy user responds with forbidden if user has transactions.
+     */
+    public function testDestroyUserRespondsWithForbiddenIfUserHasTransactions () {
+        $user = $this->createDummyUser();
+
+        $this->createDummyTransactionsTo(5, $user->id);
+
+        $this->deleteJson("/api/users/$user->id")
+            ->assertForbidden();
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Exceptions\Users\UserHasTransactionException;
+use App\Repositories\TransactionRepository;
 use App\Repositories\UserRepository;
 use App\Exceptions\Users\UnderageUserException;
 
@@ -18,10 +20,21 @@ class UserService {
      *
      * @var \App\Repositories\UserRepository
      */
-    private $repository;
+    protected $users;
 
-    public function __construct (UserRepository $repository) {
-        $this->repository = $repository;
+    /**
+     * The transaction repository.
+     *
+     * @var
+     */
+    protected $transactions;
+
+    public function __construct (
+        UserRepository $users,
+        TransactionRepository $transactions
+    ) {
+        $this->users = $users;
+        $this->transactions = $transactions;
     }
 
     /**
@@ -50,6 +63,15 @@ class UserService {
     }
 
     /**
+     * @throws \App\Exceptions\Users\UserHasTransactionException
+     */
+    protected function assertCanDelete (string $userId) {
+        if ($this->transactions->existsByUserId($userId)) {
+            throw new UserHasTransactionException();
+        }
+    }
+
+    /**
      * Create a user.
      *
      * @param string[] $attributes
@@ -58,14 +80,14 @@ class UserService {
     public function create (array $attributes) {
         $this->assertCanCreate($attributes);
 
-        return $this->repository->create($attributes);
+        return $this->users->create($attributes);
     }
 
     /**
      * Get all users.
      */
     public function all () {
-        return $this->repository->all();
+        return $this->users->all();
     }
 
     /**
@@ -74,7 +96,7 @@ class UserService {
      * @param string $userId
      */
     public function find (string $userId) {
-        return $this->repository->find($userId);
+        return $this->users->find($userId);
     }
 
     /**
@@ -84,6 +106,8 @@ class UserService {
      * @throws \App\Exceptions\Users\UserNotFoundException
      */
     public function delete (string $userId): void {
-        $this->repository->deleteById($userId);
+        $this->assertCanDelete($userId);
+
+        $this->users->deleteById($userId);
     }
 }

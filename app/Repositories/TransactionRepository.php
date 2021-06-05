@@ -70,4 +70,14 @@ class TransactionRepository {
             throw new TransactionNotFoundException();
         }
     }
+
+    /**
+     * Check if exists transactions by user id.
+     *
+     * @param string $userId
+     * @return bool
+     */
+    public function existsByUserId (string $userId): bool {
+        return Transaction::where('user_id', $userId)->exists();
+    }
 }
