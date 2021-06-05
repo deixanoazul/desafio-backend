@@ -2,8 +2,6 @@
 
 namespace App\Repositories\Eloquent;
 
-use App\Models\Transactions\Wallet;
-
 abstract class AbstractRepository
 {
     protected $model;
@@ -20,9 +18,19 @@ abstract class AbstractRepository
         return $this->model->find($id);
     }
 
-    public function findOrFail (int $id)
+    public function findOrFail(int $id)
     {
         return $this->model->findOrFail($id);
+    }
+
+    public function whereEquals($column, $value)
+    {
+        return $this->model->where($column, $value);
+    }
+
+    public function first()
+    {
+        $this->model->first();
     }
 
     public function findWallet(int $id)
@@ -30,38 +38,38 @@ abstract class AbstractRepository
         return $this->wallet::findOrFail($id);
     }
 
-    public function create ($data)
+    public function create($data)
     {
         return $this->model->create($data);
     }
 
-    public function update (array $data)
+    public function update(array $data)
     {
         return $this->model->update($data);
     }
 
-    public function paginate (int $integer)
+    public function paginate(int $integer)
     {
         return $this->model->paginate($integer);
     }
 
-    public function paginateById (int $id,int $integer)
+    public function paginateById(int $id, int $integer)
     {
         return $this->model->where('wallet_id', $id)->paginate($integer);
     }
 
-    public function orderBy ($column, $clause = 'DESC')
+    public function orderBy($column, $clause = 'DESC')
     {
         return $this->model->orderBy($column, $clause);
     }
 
-    public function delete ()
+    public function delete()
     {
         return $this->model->update();
     }
 
 
-    protected function resolveModel ()
+    protected function resolveModel()
     {
         return app($this->model);
     }

@@ -8,52 +8,55 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ChargebackRequest;
 use App\Http\Requests\TransactionRequest;
 use App\Repositories\Eloquent\TransactionRepository;
-use App\Repositories\Eloquent\WalletRepository;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
     private $transaction;
-    private $wallet;
 
-    public function __construct(TransactionRepository $transaction, WalletRepository $wallet)
+    public function __construct(TransactionRepository $transaction)
     {
         $this->transaction = $transaction;
-        $this->wallet = $wallet;
     }
 
-    public function postTransaction (TransactionRequest $request, int $id)
+    public function postTransaction(TransactionRequest $request)
     {
         if (!$request->checkAmountValidity($request->amount)) {
             return response()->json(['status' => 'error', 'message' => 'Invalid amount'], 422);
         }
         $data = $request->only(['amount', 'action']);
-        $data['wallet_id'] = $id;
+        $data['wallet_id'] = $this->getWalletId();
 
         $data['amount'] = $this->changeCurrencyFormat($data['amount']);
         try {
             $result = $this->transaction->handle($data);
 
             return response()->json(
-                    ['message' => $result['type'].' transaction performed successfully',
-                        'data' => $result
-                    ], 201);
+                ['message' => $result['type'] . ' transaction performed successfully',
+                    'data' => $result
+                ], 201);
         } catch (PaymentDeniedException $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], $e->getCode());
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
 
-    public function getTransactions($id)
+    public function getTransactions()
     {
-        $data = $this->transaction->handle($data = ['id' => $id]);
+        $data = $this->transaction->handle($data = ['id' => Auth::user()->id]);
 
         return response()->json($data);
     }
 
-    public function postChargeBack(ChargebackRequest $request)
+    public function postChargeBack(int $id)
     {
-        $data = $request->only(['transaction_id', 'wallet_id', 'details']);
+        $wallet_id = $this->getWalletId();
+        $data = [
+            'transaction_id' => $id,
+            'wallet_id' => $wallet_id,
+        ];
 //        dd($data);
         $data['action'] = 3;
 
@@ -71,7 +74,7 @@ class TransactionController extends Controller
         }
     }
 
-    public  function destroy($id)
+    public function destroy($id)
     {
         try {
             $transaction = $this->transaction->findOrFail($id);
@@ -84,10 +87,19 @@ class TransactionController extends Controller
         }
     }
 
+    private function getWalletId()
+    {
+        $wallet = DB::table('wallets')
+            ->where('user_id', Auth::user()->id)
+            ->first();
+
+        return $wallet->id;
+    }
+
     private function changeCurrencyFormat($amount)
     {
-        $amount = str_replace('.', '',$amount);
-        $amount = str_replace(',', '.',$amount);
+        $amount = str_replace('.', '', $amount);
+        $amount = str_replace(',', '.', $amount);
 
         return number_format($amount, 2, '.', '');
     }

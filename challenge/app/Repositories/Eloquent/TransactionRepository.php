@@ -26,7 +26,7 @@ class TransactionRepository extends AbstractRepository
 
         if (isset($data['action']) && $data['action'] == 3) {
             if ($this->transactionDoesNotExist($data['transaction_id'])) {
-                return throw new TransactionDoesNotExistException('This credit transaction does not exist', 401);
+                throw new TransactionDoesNotExistException('This debt transaction does not exist', 401);
             }
             return $this->doChargeback($data);
         }
@@ -74,7 +74,7 @@ class TransactionRepository extends AbstractRepository
 
     }
 
-    private function userCanPayTheAmount($data):bool
+    private function userCanPayTheAmount($data): bool
     {
         if (isset($data['action']) && $data['action'] == 1) {
             $wallet = $this->findWallet($data['wallet_id']);
@@ -136,8 +136,8 @@ class TransactionRepository extends AbstractRepository
 
             $payload = [
                 'wallet_id' => $wallet->id,
-                'amount'    => $transaction->amount,
-                'action'    => 3
+                'amount' => $transaction->amount,
+                'action' => 3
             ];
 
             return $this->create($payload);
@@ -179,7 +179,7 @@ class TransactionRepository extends AbstractRepository
 
 //        dd($transaction);
 
-        if (!$transaction or $transaction->action == 'debit') {
+        if (!$transaction or $transaction->action != 'debit') {
             return true;
         }
         return false;

@@ -27,7 +27,7 @@ class StoreUserRequest extends FormRequest
             'name' => 'required|min:2',
             'email' => 'required|email',
             'cpf' => 'required|min:11|max:11',
-            'birthday' => 'required|date_format:Y/m/d|before:16 years ago',
+            'birthday' => 'required|date_format:Y/m/d|before:21 years ago',
             'password' => 'required|confirmed|min:4'
         ];
     }

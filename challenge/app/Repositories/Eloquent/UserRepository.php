@@ -22,6 +22,7 @@ class UserRepository extends AbstractRepository
 //        dd($data['cpf']);
         DB::beginTransaction();
         try {
+            $data['password'] = bcrypt($data['password']);
             $user = $this->create($data);
 
             $user->wallet()->create();

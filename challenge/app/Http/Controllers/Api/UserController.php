@@ -10,6 +10,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -82,7 +83,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $data = $request->all();
 
@@ -97,9 +98,8 @@ class UserController extends Controller
         } else {
             unset($data['password']);
         }
-
         try {
-            $user = $this->user->findOrFail($id);
+            $user = $this->user->findOrFail(Auth::user()->id);
             $user->update($data);
 
             $user = new UserResource($user);
@@ -120,11 +120,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(int $id): JsonResponse
+    public function destroy(): JsonResponse
     {
         try {
-            $user = $this->user->findOrFail($id);
-
+            $user = $this->user->findOrFail(Auth::user()->id);
             $user->delete();
             return response()->json(['msg' => 'User deleted successfully'], 200);
 
