@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Users;
 
 use App\Services\UserService;
+
 use App\Http\Resources\UserResource;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Users\StoreUserRequest;
 
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class UserController extends Controller {
     /**
@@ -20,19 +22,50 @@ class UserController extends Controller {
         $this->service = $service;
     }
 
-    public function index (): AnonymousResourceCollection {
+    /**
+     * Handle index users request.
+     *
+     * @return \Illuminate\Http\Resources\Json\ResourceCollection
+     */
+    public function index (): ResourceCollection {
         $users = $this->service->all();
 
         return UserResource::collection($users);
     }
 
+    /**
+     * Handle show user request.
+     *
+     * @param string $userId
+     * @return \App\Http\Resources\UserResource
+     */
     public function show (string $userId): UserResource {
         $user = $this->service->find($userId);
 
         return UserResource::make($user);
     }
 
-    public function destroy (string $userId) {
+    /**
+     * Handle store user request.
+     *
+     * @param \App\Http\Requests\Users\StoreUserRequest $request
+     * @return \App\Http\Resources\UserResource
+     */
+    public function store (StoreUserRequest $request): UserResource {
+        $user = $this->service->create(
+            $request->validated()
+        );
+
+        return UserResource::make($user);
+    }
+
+    /**
+     * Handle destroy user request.
+     *
+     * @param string $userId
+     * @throws \App\Exceptions\Users\UserNotFoundException
+     */
+    public function destroy (string $userId): void {
         $this->service->delete($userId);
     }
 }
