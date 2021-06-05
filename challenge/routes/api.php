@@ -31,5 +31,10 @@ Route::namespace('Api')->name('users.')->group(function () {
 });
 
 Route::namespace('Api')->prefix('transactions')->name('transactions.')->group(function () {
-    Route::post('/{id}', [TransactionController::class, 'postTransaction']);
+    Route::post('/', [TransactionController::class, 'postTransaction'])
+        ->name('post');
+    Route::get('/{id}', [TransactionController::class, 'getTransactions'])
+        ->name('get');
+    Route::delete('{id}', [TransactionController::class, 'destroy'])
+        ->name('delete');
 });

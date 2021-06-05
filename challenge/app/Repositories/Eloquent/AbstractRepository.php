@@ -2,9 +2,13 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Models\Transactions\Wallet;
+
 abstract class AbstractRepository
 {
     protected $model;
+
+    protected $wallet;
 
     public function __construct()
     {
@@ -14,6 +18,11 @@ abstract class AbstractRepository
     public function findOrFail (int $id)
     {
         return $this->model->findOrFail($id);
+    }
+
+    public function findWallet(int $id)
+    {
+        return $this->wallet::findOrFail($id);
     }
 
     public function create ($data)

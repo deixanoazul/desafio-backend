@@ -3,12 +3,15 @@
 namespace App\Repositories\Eloquent;
 
 use App\Exceptions\CreatingUserFailedException;
+use App\Models\Transactions\Wallet;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class UserRepository extends AbstractRepository
 {
     protected $model = User::class;
+
+    protected  $wallet = Wallet::class;
 
     /**
      * @throws CreatingUserFailedException
@@ -27,8 +30,6 @@ class UserRepository extends AbstractRepository
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;
-//            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
-//            throw new CreatingUserFailedException('Could not create this user', 422);
         }
     }
 }

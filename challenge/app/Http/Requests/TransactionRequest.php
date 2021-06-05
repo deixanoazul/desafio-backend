@@ -24,9 +24,16 @@ class TransactionRequest extends FormRequest
     public function rules()
     {
         return [
-            'wallet_id' => 'required',
             'amount' => 'required',
-            'action' => 'required|in: 1, 2, 3'
+            'action' => 'required|in:1, 2'
         ];
+    }
+
+    public function checkAmountValidity($amount): bool
+    {
+        if ($amount > 0) {
+            return true;
+        }
+        return false;
     }
 }
