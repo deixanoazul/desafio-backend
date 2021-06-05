@@ -45,8 +45,9 @@ class UserService {
      * Delete user by id.
      *
      * @param string $userId
+     * @throws \App\Exceptions\Users\UserNotFoundException
      */
-    public function delete (string $userId) {
-        $this->repository->delete($userId);
+    public function delete (string $userId): void {
+        $this->repository->deleteById($userId);
     }
 }
