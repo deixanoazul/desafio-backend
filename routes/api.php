@@ -2,11 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Users\UserController;
+use App\Http\Controllers\Users\UserTransactionController;
+use App\Http\Controllers\Transactions\TransactionController;
 
-use App\Http\Controllers\Auth\SignInController;
-use App\Http\Controllers\Auth\SignUpController;
-use App\Http\Controllers\Auth\SignOutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,10 +19,15 @@ use App\Http\Controllers\Auth\SignOutController;
 |
 */
 
-Route::post('/sign-in', SignInController::class);
-Route::post('/sign-up', SignUpController::class);
-Route::post('/sign-out', SignOutController::class)->middleware('auth');
+Route::post('/sign-in', [AuthController::class, 'signIn']);
+Route::post('/sign-out', [AuthController::class, 'signOut'])
+    ->middleware('auth');
 
-Route::get('/users', [UserController::class, 'index']);
-Route::get('/users/{userId}', [UserController::class, 'show']);
-Route::delete('/users/{userId}', [UserController::class, 'destroy']);
+Route::apiResource('users', UserController::class)
+    ->only(['index', 'show', 'store', 'destroy']);
+
+Route::apiResource('users.transactions', UserTransactionController::class)
+    ->only(['index', 'store']);
+
+Route::apiResource('transactions', TransactionController::class)
+    ->only(['index', 'show', 'destroy']);
