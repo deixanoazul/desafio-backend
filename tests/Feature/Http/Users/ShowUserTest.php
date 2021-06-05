@@ -11,6 +11,11 @@ class ShowUserTest extends TestCase {
     use DatabaseMigrations,
         HasDummyUser;
 
+    /**
+     * The dummy user.
+     *
+     * @var \App\Models\User
+     */
     private $user;
 
     public function setUp (): void {
@@ -19,18 +24,28 @@ class ShowUserTest extends TestCase {
         $this->user = $this->createDummyUser();
     }
 
+    /**
+     * Test if show user responds with 200 status code.
+     */
     public function testShowUserRespondsWithOk () {
-        $this->getJson("/api/users/{$this->user->id}")->assertOk();
+        $this->getJson("/api/users/{$this->user->id}")
+            ->assertOk();
     }
 
-    public function testShowUserRespondsWithValidStructure () {
-        $this->getJson("/api/users/{$this->user->id}")->assertJsonStructure([
-            'data' => [
-                'name',
-                'cpf',
-                'email',
-                'birthdate',
-            ]
-        ]);
+    /**
+     * Test if show user responds with attributes.
+     */
+    public function testShowUserRespondsWithAttributes () {
+        $this->getJson("/api/users/{$this->user->id}")
+            ->assertJsonStructure([
+                'data' => [
+                    'name',
+                    'cpf',
+                    'email',
+                    'birthdate',
+                    'created_at',
+                    'updated_at',
+                ]
+            ]);
     }
 }

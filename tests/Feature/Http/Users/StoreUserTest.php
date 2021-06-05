@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Feature\Http\Auth;
+namespace Tests\Feature\Http\Users;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
-class SignUpTest extends TestCase {
+class StoreUserTest extends TestCase {
     use DatabaseMigrations;
 
     /**
@@ -29,17 +29,18 @@ class SignUpTest extends TestCase {
     }
 
     /**
-     * Test if sign up responds with 201 status code.
+     * Test if store user responds with 201 status code.
      */
-    public function testSignUpRespondsWithCreated () {
-        $this->postJson('/api/sign-up', $this->payload)->assertCreated();
+    public function testStoreUserRespondsWithCreated () {
+        $this->postJson('/api/users', $this->payload)
+            ->assertCreated();
     }
 
     /**
-     * Test if sign up creates an user with attributes.
+     * Test if store user creates an user with attributes.
      */
-    public function testSignUpCreatesUserWithAttributes () {
-        $this->postJson('/api/sign-up', $this->payload);
+    public function testStoreUserCreatesUserWithAttributes () {
+        $this->postJson('/api/users', $this->payload);
 
         $this->assertDatabaseHas('users', [
             'name' => $this->payload['name'],

@@ -12,12 +12,11 @@ class IndexUserTest extends TestCase {
         HasDummyUser;
 
     /**
-     * Test if index users responds successfully.
+     * Test if index users responds with 200 status code.
      */
     public function testIndexUsersRespondsWithOk () {
-        $response = $this->getJson('/api/users');
-
-        $response->assertOk();
+        $this->getJson('/api/users')
+            ->assertOk();
     }
 
     /**
@@ -26,28 +25,28 @@ class IndexUserTest extends TestCase {
     public function testIndexUsersRespondsWithAllUsers () {
         $this->createDummyUsers(10);
 
-        $response = $this->getJson('/api/users');
-
-        $response->assertJsonCount(10, 'data');
+        $this->getJson('/api/users')
+            ->assertJsonCount(10, 'data');
     }
 
     /**
      * Test if index users responds with valid structure.
      */
     public function testIndexUsersRespondsWithValidStructure () {
-        $this->createDummyUsers(3);
+        $this->createDummyUsers(10);
 
-        $response = $this->getJson('/api/users');
-
-        $response->assertJsonStructure([
-            'data' => [
-                '*' => [
-                    'name',
-                    'cpf',
-                    'email',
-                    'birthdate',
-                ]
-            ]
-        ]);
+        $this->getJson('/api/users')
+            ->assertJsonStructure([
+                'data' => [
+                   '*' => [
+                       'name',
+                       'cpf',
+                       'email',
+                       'birthdate',
+                       'created_at',
+                       'updated_at',
+                   ],
+                ],
+            ]);
     }
 }

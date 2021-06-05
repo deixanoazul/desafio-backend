@@ -12,67 +12,46 @@ class SignInTest extends TestCase {
         HasDummyUser;
 
     /**
-     * The dummy email.
+     * The dummy credentials.
      *
      * @var string
      */
-    private $email;
-
-    /**
-     * The dummy password.
-     * @var string
-     */
-    private $password;
+    private $credentials;
 
     public function setUp (): void {
         parent::setUp();
 
-        $this->email = 'foo@bar.org';
-        $this->password = 'secret123';
+        $this->credentials = [
+            'email' => 'foo@bar.org',
+            'password' => 'secret123',
+        ];
     }
 
     /**
      * Test if sign in responds with 200 status code if user exists.
      */
     public function testSignInRespondsWithOk () {
-        $this->createDummyUser([
-            'email' => $this->email,
-            'password' => $this->password,
-        ]);
+        $this->createDummyUser($this->credentials);
 
-        $response = $this->postJson('/api/sign-in', [
-            'email' => $this->email,
-            'password' => $this->password,
-        ]);
-
-        $response->assertOk();
+        $this->postJson('/api/sign-in', $this->credentials)
+            ->assertOk();
     }
 
     /**
      * Test if sign in responds with 401 status code if user doesn't exist.
      */
     public function testSignInRespondsWithUnauthorized () {
-        $response = $this->postJson('/api/sign-in', [
-            'email' => $this->email,
-            'password' => $this->password,
-        ]);
-
-        $response->assertUnauthorized();
+        $this->postJson('/api/sign-in', $this->credentials)
+            ->assertUnauthorized();
     }
 
     /**
      * Test if sign in authenticates a user with valid credentials.
      */
     public function testSignInAuthenticates () {
-        $user = $this->createDummyUser([
-            'email' => $this->email,
-            'password' => $this->password,
-        ]);
+        $user = $this->createDummyUser($this->credentials);
 
-        $this->postJson('/api/sign-in', [
-            'email' => $this->email,
-            'password' => $this->password,
-        ]);
+        $this->postJson('/api/sign-in', $this->credentials);
 
         $this->assertAuthenticatedAs($user);
     }
