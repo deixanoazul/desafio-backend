@@ -2,9 +2,9 @@
 
 namespace App\Exceptions\Users;
 
-use App\Exceptions\BadRequestException;
+use App\Exceptions\ForbiddenException;
 
-class UnderageUserException extends BadRequestException {
+class UnderageUserException extends ForbiddenException {
     /**
      * The exception message.
      *
