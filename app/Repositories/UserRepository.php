@@ -44,6 +44,21 @@ class UserRepository {
     }
 
     /**
+     * Update user by id with specified attributes.
+     *
+     * @param array $attributes
+     * @param string $userId
+     * @return \App\Models\User
+     */
+    public function updateById (array $attributes, string $userId): User {
+        $user = User::findOrFail($userId);
+
+        $user->update($attributes);
+
+        return $user;
+    }
+
+    /**
      * Delete user by id.
      *
      * @param string $userId

@@ -8,6 +8,7 @@
       <option name="CHECK_FIELD" value="true" />
       <option name="CHECK_CLASS_CONSTANT" value="true" />
     </inspection_tool>
+    <inspection_tool class="PhpUnnecessaryCurlyVarSyntaxInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="PhpUnnecessaryFullyQualifiedNameInspection" enabled="false" level="WARNING" enabled_by_default="false" />
   </profile>
 </component>

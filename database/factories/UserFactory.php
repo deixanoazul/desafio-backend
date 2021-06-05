@@ -22,6 +22,7 @@ $factory->define(User::class, function (Faker $faker) {
         'email' => $faker->email,
         'cpf' => $faker->cpf,
         'birthdate' => $faker->date,
+        'balance' => $faker->numberBetween(0, 1000),
         'password' => bcrypt('password'),
     ];
 });

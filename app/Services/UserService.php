@@ -100,6 +100,17 @@ class UserService {
     }
 
     /**
+     * Update user by id.
+     *
+     * @param array $attributes
+     * @param string $userId
+     * @return mixed
+     */
+    public function update (array $attributes, string $userId) {
+        return $this->users->updateById($attributes, $userId);
+    }
+
+    /**
      * Delete user by id.
      *
      * @param string $userId

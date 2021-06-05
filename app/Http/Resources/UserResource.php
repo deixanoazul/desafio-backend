@@ -18,6 +18,7 @@ class UserResource extends JsonResource {
             'cpf' => $this->cpf,
             'email' => $this->email,
             'birthdate' => $this->birthdate,
+            'balance' => $this->balance,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

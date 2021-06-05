@@ -19,6 +19,7 @@ class StoreUserTest extends TestCase {
             'email' => 'johndoe@example.org',
             'cpf' => '000.000.000-00',
             'birthdate' => '1980-01-01',
+            'balance' => 0,
             'password' => 'secret123',
         ];
     }
@@ -34,6 +35,7 @@ class StoreUserTest extends TestCase {
             'email' => 'janedoe@example.org',
             'cpf' => '000.000.000-00',
             'birthdate' => '2005-01-01',
+            'balance' => 0,
             'password' => 'secret321',
         ];
     }
@@ -59,6 +61,7 @@ class StoreUserTest extends TestCase {
             'email' => $payload['email'],
             'cpf' => $payload['cpf'],
             'birthdate' => $payload['birthdate'],
+            'balance' => $payload['balance'],
         ]);
     }
 

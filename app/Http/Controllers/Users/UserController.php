@@ -6,7 +6,9 @@ use App\Services\UserService;
 
 use App\Http\Resources\UserResource;
 use App\Http\Controllers\Controller;
+
 use App\Http\Requests\Users\StoreUserRequest;
+use App\Http\Requests\Users\UpdateUserRequest;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
@@ -55,6 +57,12 @@ class UserController extends Controller {
         $user = $this->service->create(
             $request->validated()
         );
+
+        return UserResource::make($user);
+    }
+
+    public function update (UpdateUserRequest $request, string $userId): UserResource {
+        $user = $this->service->update($request->validated(), $userId);
 
         return UserResource::make($user);
     }

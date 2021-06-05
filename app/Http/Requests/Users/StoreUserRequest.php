@@ -16,6 +16,7 @@ class StoreUserRequest extends FormRequest {
             'cpf' => 'string|required',
             'email' => 'email|required',
             'birthdate' => 'date|required',
+            'balance' => 'integer|required',
             'password' => 'string|min:8|required',
         ];
     }
