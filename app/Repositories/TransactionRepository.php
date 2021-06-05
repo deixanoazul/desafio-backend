@@ -80,4 +80,14 @@ class TransactionRepository {
     public function existsByUserId (string $userId): bool {
         return Transaction::where('user_id', $userId)->exists();
     }
+
+    /**
+     * Sum transaction amounts by user id.
+     *
+     * @param string $userId
+     * @return int
+     */
+    public function sumAmountByUserId (string $userId): int {
+        return Transaction::where('user_id', $userId)->sum('amount');
+    }
 }

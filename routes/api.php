@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Users\UserController;
 use App\Http\Controllers\Users\UserTransactionController;
+use App\Http\Controllers\Users\UserTransactedController;
 use App\Http\Controllers\Transactions\TransactionController;
 
 
@@ -24,6 +25,8 @@ Route::post('/sign-out', [AuthController::class, 'signOut'])
     ->middleware('auth');
 
 Route::apiResource('users', UserController::class);
+
+Route::get('/users/{userId}/transacted', UserTransactedController::class);
 
 Route::apiResource('users.transactions', UserTransactionController::class)
     ->only(['index', 'store']);

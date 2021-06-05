@@ -81,14 +81,7 @@ class IndexUserTransactionTest extends TestCase {
 
         $this->getJson("/api/users/{$this->user->id}/transactions")
             ->assertJsonStructure([
-                'user' => [
-                    'name',
-                    'cpf',
-                    'email',
-                    'birthdate',
-                    'created_at',
-                    'updated_at',
-                ],
+                'user'
             ]);
     }
 }

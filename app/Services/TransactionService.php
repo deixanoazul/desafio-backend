@@ -61,4 +61,14 @@ class TransactionService {
     public function delete (string $transactionId) {
         $this->repository->deleteById($transactionId);
     }
+
+    /**
+     * Get total transacted by user id.
+     *
+     * @param string $userId
+     * @return int
+     */
+    public function getTotalTransactedByUserId (string $userId): int {
+        return $this->repository->sumAmountByUserId($userId);
+    }
 }
