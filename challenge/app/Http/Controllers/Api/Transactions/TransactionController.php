@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api\Transactions;
 
 use App\Exceptions\PaymentDeniedException;
+use App\Exceptions\TransactionDoesNotExistException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChargebackRequest;
 use App\Http\Requests\TransactionRequest;
-//use App\Repositories\Contracts\TransactionRepositoryInterface;
-//use App\Repositories\Contracts\WalletRepositoryInterface;
 use App\Repositories\Eloquent\TransactionRepository;
 use App\Repositories\Eloquent\WalletRepository;
 
@@ -49,6 +49,26 @@ class TransactionController extends Controller
         $data = $this->transaction->handle($data = ['id' => $id]);
 
         return response()->json($data);
+    }
+
+    public function postChargeBack(ChargebackRequest $request)
+    {
+        $data = $request->only(['transaction_id', 'wallet_id', 'details']);
+//        dd($data);
+        $data['action'] = 3;
+
+        try {
+            $result = $this->transaction->handle($data);
+
+            return response()->json(
+                ['message' => 'Chargeback performed successfully',
+                    'data' => $result
+                ], 201);
+        } catch (TransactionDoesNotExistException $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], $e->getCode());
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 422);
+        }
     }
 
     public  function destroy($id)

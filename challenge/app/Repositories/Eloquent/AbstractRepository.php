@@ -15,6 +15,11 @@ abstract class AbstractRepository
         $this->model = $this->resolveModel();
     }
 
+    public function find(int $id)
+    {
+        return $this->model->find($id);
+    }
+
     public function findOrFail (int $id)
     {
         return $this->model->findOrFail($id);
@@ -38,6 +43,11 @@ abstract class AbstractRepository
     public function paginate (int $integer)
     {
         return $this->model->paginate($integer);
+    }
+
+    public function paginateById (int $id,int $integer)
+    {
+        return $this->model->where('wallet_id', $id)->paginate($integer);
     }
 
     public function orderBy ($column, $clause = 'DESC')

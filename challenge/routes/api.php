@@ -33,6 +33,8 @@ Route::namespace('Api')->name('users.')->group(function () {
 Route::namespace('Api')->prefix('transactions')->name('transactions.')->group(function () {
     Route::post('/', [TransactionController::class, 'postTransaction'])
         ->name('post');
+    Route::post('/chargeback', [TransactionController::class, 'postChargeBack'])
+        ->name('post_chargeback');
     Route::get('/{id}', [TransactionController::class, 'getTransactions'])
         ->name('get');
     Route::delete('{id}', [TransactionController::class, 'destroy'])
