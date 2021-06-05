@@ -63,10 +63,10 @@ class StoreUserTest extends TestCase {
     }
 
     /**
-     * Test if store user does not creates an underage user.
+     * Test if store user responds with forbidden if user is underage.
      */
-    public function testStoreUserRespondsWithBadRequestIfUserIsUnderage () {
+    public function testStoreUserRespondsWithForbiddenIfUserIsUnderage () {
         $this->postJson('/api/users', $this->getUnderageDummyUserPayload())
-            ->assertStatus(400);
+            ->assertForbidden();
     }
 }
