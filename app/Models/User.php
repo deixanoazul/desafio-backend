@@ -5,14 +5,17 @@ namespace App\Models;
 use App\Traits\HasUUID;
 use App\Traits\HasPassword;
 
-use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
-/**
- * @method static create(array $attributes)
- */
-class User extends Authenticatable implements JWTSubject {
-    use HasUUID,
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+use Tymon\JWTAuth\Contracts\JWTSubject;
+
+class User extends Model implements AuthenticatableContract, JWTSubject {
+    use Authenticatable,
+        HasUUID,
         HasPassword;
 
     /**
@@ -49,6 +52,15 @@ class User extends Authenticatable implements JWTSubject {
      */
     public function getJWTCustomClaims (): array {
         return [];
+    }
+
+    /**
+     * Get the transactions of this user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function transactions (): HasMany {
+        return $this->hasMany(Transaction::class);
     }
 
 }
