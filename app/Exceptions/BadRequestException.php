@@ -2,11 +2,11 @@
 
 namespace App\Exceptions;
 
-class NotFoundException extends StatusCodeException {
+class BadRequestException extends StatusCodeException {
     /**
      * The response status code.
      *
      * @var int
      */
-    protected $statusCode = 404;
+    protected $statusCode = 400;
 }

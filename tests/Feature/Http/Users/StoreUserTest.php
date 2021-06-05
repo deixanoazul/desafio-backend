@@ -9,22 +9,32 @@ class StoreUserTest extends TestCase {
     use DatabaseMigrations;
 
     /**
-     * The dummy attributes.
+     * Get dummy user payload.
      *
-     * @var string[]
+     * @return string[]
      */
-    private $payload;
-
-    public function setUp (): void {
-        parent::setUp();
-
-        $this->payload = [
+    protected function getDummyUserPayload (): array {
+        return [
             'name' => 'John Doe',
             'email' => 'johndoe@example.org',
             'cpf' => '000.000.000-00',
-            'birthdate' => '01/01/1980',
+            'birthdate' => '1980-01-01',
             'password' => 'secret123',
-            'password_confirmation' => 'secret123',
+        ];
+    }
+
+    /**
+     * Get underage dummy user payload.
+     *
+     * @return string[]
+     */
+    protected function getUnderageDummyUserPayload (): array {
+        return [
+            'name' => 'Jane Doe',
+            'email' => 'janedoe@example.org',
+            'cpf' => '000.000.000-00',
+            'birthdate' => '2005-01-01',
+            'password' => 'secret321',
         ];
     }
 
@@ -32,7 +42,7 @@ class StoreUserTest extends TestCase {
      * Test if store user responds with 201 status code.
      */
     public function testStoreUserRespondsWithCreated () {
-        $this->postJson('/api/users', $this->payload)
+        $this->postJson('/api/users', $this->getDummyUserPayload())
             ->assertCreated();
     }
 
@@ -40,13 +50,23 @@ class StoreUserTest extends TestCase {
      * Test if store user creates an user with attributes.
      */
     public function testStoreUserCreatesUserWithAttributes () {
-        $this->postJson('/api/users', $this->payload);
+        $payload = $this->getDummyUserPayload();
+
+        $this->postJson('/api/users', $payload);
 
         $this->assertDatabaseHas('users', [
-            'name' => $this->payload['name'],
-            'email' => $this->payload['email'],
-            'cpf' => $this->payload['cpf'],
-            'birthdate' => $this->payload['birthdate'],
+            'name' => $payload['name'],
+            'email' => $payload['email'],
+            'cpf' => $payload['cpf'],
+            'birthdate' => $payload['birthdate'],
         ]);
+    }
+
+    /**
+     * Test if store user does not creates an underage user.
+     */
+    public function testStoreUserRespondsWithBadRequestIfUserIsUnderage () {
+        $this->postJson('/api/users', $this->getUnderageDummyUserPayload())
+            ->assertStatus(400);
     }
 }
