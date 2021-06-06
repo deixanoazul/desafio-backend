@@ -18,6 +18,8 @@ class AuthController extends Controller {
 
     public function __construct (AuthService $services) {
         $this->services = $services;
+
+        $this->middleware('auth')->only(['signOut']);
     }
 
     /**
