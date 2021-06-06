@@ -48,7 +48,9 @@ class DestroyUserTest extends TestCase {
      * Test if destroy user responds with forbidden if user has transactions.
      */
     public function testDestroyUserRespondsWithForbiddenIfUserHasTransactions () {
-        $user = $this->createDummyUser();
+        $user = $this->createDummyUser([
+            'balance' => 0,
+        ]);
 
         $this->createDummyTransactionsTo(5, $user->id);
 
