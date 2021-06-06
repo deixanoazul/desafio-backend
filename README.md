@@ -2,7 +2,7 @@
 
 ![Workflow](https://github.com/zaclummys/desafio-backend/actions/workflows/laravel.yml/badge.svg)
 
-Esta é uma aplicação para armazenamento e processamento de transações financeiras. Foi construída com **PHP** 7.4 e **Laravel** 7.3 para o desafio proposto pelo [Deixa no Azul](https://github.com/deixanoazul/desafio-backend). Pode experimentar a aplicação ao vivo aqui: [Desafio Backend PHP - Heroku](https://desafio-backend-deixa-no-azul.herokuapp.com).
+Esta é uma aplicação para armazenamento e processamento de transações financeiras. Foi construída com **PHP** 7.4 e **Laravel** 7.3, completando todas 4 fases do desafio proposto pelo [Deixa no Azul](https://github.com/deixanoazul/desafio-backend). Pode experimentar a aplicação ao vivo aqui: [Desafio Backend PHP - Heroku](https://desafio-backend-deixa-no-azul.herokuapp.com).
 
 ## Instalação :turtle:
 
@@ -16,11 +16,25 @@ Uma chave JWT será gerada automaticamente quando a instalação for finalizada.
 
 ## Começar :running:
 
-Para iniciar a aplicação, execute a seguinte linha de comando:
+Para começar, execute as migrações para criar as tabelas e os índices no banco de dados:
+
+```bash
+$ php artisan migrate
+```
+
+Se achar conveniente, pode executar também o semeador para preencher as tabelas automaticamente:
+
+```bash
+$ php artisan db:seed
+```
+
+Para iniciar a aplicação, é só rodar a seguinte linha de comando:
 
 ```bash
 $ php artisan serve
 ```
+
+A aplicação será servida em [http://127.0.0.1:8000](http://127.0.0.1:8000/).
 
 ### Endpoints
 Para acessar os endpoints da API, será necessário utilizar o cabeçalho `accept: application/json`. As rotas podem ser acessadas tanto por um usuário autenticado quanto por modo anônimo. Entretanto, as rotas de criação e remoção de entidades necessitam de autenticação e autorização.
