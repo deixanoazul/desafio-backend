@@ -12,7 +12,7 @@ class TransactionRepository {
     /**
      * The cache time to live in seconds.
      */
-    private const CACHE_TTL = 5;
+    private const CACHE_TTL = 60 * 60;
 
     /**
      * The number of transactions per page.
