@@ -1,7 +1,8 @@
 {
-    "name": "laravel/laravel",
+    "name": "zaclummys/desafio-backend",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "Desafio Backend PHP - Deixa no Azul",
+    "version": "1.0.0",
     "keywords": [
         "framework",
         "laravel"
