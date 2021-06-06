@@ -25,6 +25,7 @@ class SignOutTest extends TestCase {
      */
     public function testSignOutRespondsWithOk () {
         $this->postJson('/api/sign-out')
+            ->dump()
             ->assertOk();
     }
 
@@ -32,7 +33,8 @@ class SignOutTest extends TestCase {
      * Test if sign out invalidates authentication.
      */
     public function testSignOutInvalidatesAuthentication () {
-        $this->postJson('/api/sign-out');
+        $this->postJson('/api/sign-out')
+            ->dump();
 
         $this->assertGuest();
     }
