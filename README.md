@@ -2,17 +2,17 @@
 
 ![Workflow](https://github.com/zaclummys/desafio-backend/actions/workflows/laravel.yml/badge.svg)
 
-Esta é uma aplicação para armazenamento e processamento de transações financeiras. Foi construída utilizando **PHP** 7.4 e **Laravel** 7.3 para o desafio proposto pelo [Deixa no Azul](https://github.com/deixanoazul/desafio-backend). Você pode experimentar a aplicação ao vivo aqui: [Desafio Backend PHP - Heroku](https://desafio-backend-deixa-no-azul.herokuapp.com).
+Esta é uma aplicação para armazenamento e processamento de transações financeiras. Foi construída com **PHP** 7.4 e **Laravel** 7.3 para o desafio proposto pelo [Deixa no Azul](https://github.com/deixanoazul/desafio-backend). Pode experimentar a aplicação ao vivo aqui: [Desafio Backend PHP - Heroku](https://desafio-backend-deixa-no-azul.herokuapp.com).
 
 ## Instalação :turtle:
 
-Para executar esse projeto, será necessário ter **PHP** 7.4 e **Composer** 2.0 instalado em sua máquina. Feito isso, instale os pacotes necessários:
+Para executar esse projeto, será necessário ter **PHP** 7.4 e **Composer** 2.0 instalado em sua máquina. Após isso, instale os pacotes necessários:
 
 ```bash
 $ composer install
 ```
 
-Uma chave JWT será gerada automaticamente quando a instalação for finalizada. Além disso, será configurado um base de dados SQLite para facilitar a utilização da aplicação.
+Uma chave JWT será gerada automaticamente quando a instalação for finalizada. Além disso, será configurado uma base de dados SQLite para facilitar a utilização da aplicação.
 
 ## Começar :running:
 
@@ -23,7 +23,7 @@ $ php artisan serve
 ```
 
 ### Endpoints
-Para acessar os endpoints da API, será necessário utilizar o cabeçalho `accept: application/json`. As rotas podem ser acessadas tanto por um usuário autenticado quanto por modo anônimo. Entretanto, as rotas de criação e removação de entidades necessitam de autenticação e autorização.
+Para acessar os endpoints da API, será necessário utilizar o cabeçalho `accept: application/json`. As rotas podem ser acessadas tanto por um usuário autenticado quanto por modo anônimo. Entretanto, as rotas de criação e remoção de entidades necessitam de autenticação e autorização.
 
 | Método    | URI                               | Descrição                                                     | Campos
 |-----------|-----------------------------------|---------------------------------------------------------------|------------------------
@@ -48,7 +48,7 @@ Para acessar os endpoints da API, será necessário utilizar o cabeçalho `accep
 
 ### Cache
 
-A operação de calcular o total transacionado para cada usuário é uma operação custosa, pois analisa todo o histórico de transações do usuário. Por isso, o valor calculado é armazenado em cache para garantir a otimização dos recursos. Mas não se preocupe, pois toda vez que o usuário criar ou deletar uma transação, o valor em cache será esquecido para que possa ser atualizado quando necessário.
+A operação de calcular o total transacionado para cada usuário é uma operação custosa, pois analisa todo o histórico de transações do usuário. Por isso, o valor calculado é armazenado em cache para garantir a otimização dos recursos. Entretanto, não se preocupe, pois, toda a vez que o usuário criar ou deletar uma transação, o valor em cache será esquecido para que possa ser atualizado quando necessário.
 
 ## Testar 
 
@@ -60,7 +60,7 @@ $ composer run test
 ```
 
 ### Cobertura :cake:
-Para gerar o relatório de cobertura de testes, é necessário ter instalado em sua máquina a extensão [XDebug](https://xdebug.org/docs/install). Feito isso, execute a seguinte linha de comando:
+Para gerar o relatório de cobertura de testes, é necessário ter instalado na sua máquina a extensão [XDebug](https://xdebug.org/docs/install). Feito isso, execute a seguinte linha de comando:
 
 ```bash
 $ composer run coverage
