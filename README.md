@@ -1,6 +1,6 @@
 # Desafio Back-end PHP
 
-Esta é uma aplicação para armazenamento e processamento de transações financeiras. Foi construída utilizando **PHP** 7.4 e **Laravel** 7.3 para o desafio proposto pelo [Deixa no Azul](https://github.com/deixanoazul/desafio-backend).
+Esta é uma aplicação para armazenamento e processamento de transações financeiras. Foi construída utilizando **PHP** 7.4 e **Laravel** 7.3 para o desafio proposto pelo [Deixa no Azul](https://github.com/deixanoazul/desafio-backend). Você pode experimentar a aplicação ao vivo aqui: [Desafio Backend PHP - Heroku](https://desafio-backend-deixa-no-azul.herokuapp.com).
 
 ## Instalação :turtle:
 
