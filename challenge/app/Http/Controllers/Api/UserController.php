@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Exceptions\CreatingUserFailedException;
+use App\Exceptions\DeleteException;
 use App\Http\Controllers\Controller;
 use App\Repositories\Eloquent\UserRepository;
 use Illuminate\Http\Request;
@@ -123,11 +124,11 @@ class UserController extends Controller
     public function destroy(): JsonResponse
     {
         try {
-            $user = $this->user->findOrFail(Auth::user()->id);
-            $user->delete();
-            return response()->json(['msg' => 'User deleted successfully'], 200);
-
-        } catch (\Exception $e) {
+           $user = $this->user->deleteUser(Auth::user()->id);
+            return response()->json(['status' => 'success', 'message' => 'User deleted successfully'], 200);
+        }catch (DeleteException $e){
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], $e->getCode());
+        }catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 422);
         }
     }

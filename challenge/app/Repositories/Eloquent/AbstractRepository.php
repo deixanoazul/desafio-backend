@@ -65,7 +65,7 @@ abstract class AbstractRepository
 
     public function delete()
     {
-        return $this->model->update();
+        return $this->model->delete();
     }
 
 
