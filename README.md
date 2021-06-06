@@ -46,18 +46,18 @@ Para acessar os endpoints da API, será necessário utilizar o cabeçalho `accep
 
 ### Cache
 
-A operação de calcular o total transacionado para cada usuário é uma operação custosa, pois analisa todo o histórico de transações do usuário. Por isso, o valor calculado é armazenado em cache para garantir a otimização dos recursos. Mas não se preocupe, pois toda vez que o usuário criar ou deletar uma transação, o valor em cache será esquecido e para que possa ser atualizado quando necessário.
+A operação de calcular o total transacionado para cada usuário é uma operação custosa, pois analisa todo o histórico de transações do usuário. Por isso, o valor calculado é armazenado em cache para garantir a otimização dos recursos. Mas não se preocupe, pois toda vez que o usuário criar ou deletar uma transação, o valor em cache será esquecido para que possa ser atualizado quando necessário.
 
-## Testar :beetle:
+## Testar 
 
-### Testes de integração
+### Testes de integração :bug:
 Para executar os testes de integração, execute a seguinte linha de comando:
 
 ```bash
 $ composer run test
 ```
 
-### Cobertura
+### Cobertura :cake:
 Para gerar o relatório de cobertura de testes, é necessário ter instalado em sua máquina a extensão [XDebug](https://xdebug.org/docs/install). Feito isso, execute a seguinte linha de comando:
 
 ```bash
@@ -66,6 +66,6 @@ $ composer run coverage
 
 A aplicação tem 100% de cobertura de testes. :smiley:
 
-## Autor
+## Autor :pencil2:
 
 Isaac Luiz Vieira Ferreira <isaacluizvieiraferreira@id.uff.br>
