@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Exceptions\Auth\InvalidCredentialsException;
 
 use Illuminate\Contracts\Auth\Factory as Auth;
-use Illuminate\Contracts\Auth\Authenticatable;
 
 class AuthService {
     /**
@@ -17,24 +16,6 @@ class AuthService {
 
     public function __construct (Auth $auth) {
         $this->auth = $auth;
-    }
-
-    /**
-     * Get the current user id.
-     *
-     * @return string
-     */
-    public function id (): string {
-        return $this->auth->guard()->id();
-    }
-
-    /**
-     * Get the current user.
-     *
-     * @return \Illuminate\Contracts\Auth\Authenticatable
-     */
-    public function user (): Authenticatable {
-        return $this->auth->guard()->user();
     }
 
     /**
