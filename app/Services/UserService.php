@@ -135,6 +135,8 @@ class UserService {
      *
      * @param string $userId
      * @throws \App\Exceptions\Users\UserNotFoundException
+     * @throws \App\Exceptions\Users\UserHasBalanceException
+     * @throws \App\Exceptions\Users\UserHasTransactionException
      */
     public function delete (string $userId): void {
         $this->assertCanDelete($userId);
