@@ -45,6 +45,16 @@ Then install, migrate, seed, all that jazz:
 
 The API will be running on `localhost:8000`
 
+Login with user below if you do not want to create a new user and you want to access the 
+protected routes.
+
+```javascript
+{
+    'email': teste@dna.com,
+    'password': 1234abcd
+}
+```
+
 ## API Endpoints and Routes
 Laravel follows the Model View Controller (MVC) pattern I have created models associated with
 each resource. You can check in the **routes/api.php** file for all the routes that map to 
