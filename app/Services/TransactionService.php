@@ -3,8 +3,17 @@
 namespace App\Services;
 
 use App\Repositories\TransactionRepository;
+use App\Exceptions\Transactions\ForbiddenTransactionCreate;
+use App\Exceptions\Transactions\ForbiddenTransactionDelete;
 
 class TransactionService {
+    /**
+     * The auth service.
+     *
+     * @var \App\Services\AuthService
+     */
+    private $auth;
+
     /**
      * The transaction repository.
      *
@@ -12,8 +21,46 @@ class TransactionService {
      */
     private $repository;
 
-    public function __construct (TransactionRepository $repository) {
+    public function __construct (
+        AuthService $auth,
+        TransactionRepository $repository
+    ) {
+        $this->auth = $auth;
         $this->repository = $repository;
+    }
+
+    /**
+     * Check if current user owns the specified transaction.
+     *
+     * @param string $transactionId
+     * @return bool
+     */
+    private function doesCurrentUserOwnTransaction (string $transactionId): bool {
+        return $this->auth->isCurrentUserId(
+            $this->repository->getTransactionOwnerId($transactionId)
+        );
+    }
+
+    /**
+     * Assert transaction can be created.
+     *
+     * @throws \App\Exceptions\Transactions\ForbiddenTransactionCreate
+     */
+    private function assertCanCreate (string $userId): void {
+        if (!$this->auth->isCurrentUserId($userId)) {
+            throw new ForbiddenTransactionCreate();
+        }
+    }
+
+    /**
+     * Assert transaction can be deleted.
+     *
+     * @throws \App\Exceptions\Transactions\ForbiddenTransactionDelete
+     */
+    private function assertCanDelete (string $transactionId): void {
+        if (!$this->doesCurrentUserOwnTransaction($transactionId)) {
+            throw new ForbiddenTransactionDelete();
+        }
     }
 
     /**
@@ -39,6 +86,8 @@ class TransactionService {
      * @param string $userId
      */
     public function create (array $attributes, string $userId) {
+        $this->assertCanCreate($userId);
+
         return $this->repository->create($attributes, $userId);
     }
 
@@ -56,9 +105,11 @@ class TransactionService {
      * Delete a transaction.
      *
      * @param string $transactionId
-     * @throws \App\Exceptions\Transactions\TransactionNotFoundException
+     * @throws \App\Exceptions\Transactions\ForbiddenTransactionDelete
      */
     public function delete (string $transactionId) {
+        $this->assertCanDelete($transactionId);
+
         $this->repository->deleteById($transactionId);
     }
 

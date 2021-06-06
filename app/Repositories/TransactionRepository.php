@@ -25,7 +25,7 @@ class TransactionRepository {
      * @param \App\Models\Transaction $transaction
      * @return string
      */
-    protected function getUserId (Transaction $transaction): string {
+    private function getUserId (Transaction $transaction): string {
         return $transaction->user_id;
     }
 
@@ -34,7 +34,7 @@ class TransactionRepository {
      *
      * @return int
      */
-    protected function getCacheTimeToLive (): int {
+    private function getCacheTimeToLive (): int {
         return TransactionRepository::CACHE_TTL;
     }
 
@@ -45,7 +45,7 @@ class TransactionRepository {
      * @param \Closure $callback
      * @return mixed
      */
-    protected function cache (string $key, \Closure $callback) {
+    private function cache (string $key, Closure $callback) {
         return Cache::remember($key, $this->getCacheTimeToLive(), $callback);
     }
 
@@ -54,7 +54,7 @@ class TransactionRepository {
      *
      * @param string $key
      */
-    protected function forget (string $key) {
+    private function forget (string $key) {
         Cache::forget($key);
     }
 
@@ -64,7 +64,7 @@ class TransactionRepository {
      * @param string $userId
      * @return string
      */
-    protected function buildSumAmountByUserIdKey (string $userId): string {
+    private function buildSumAmountByUserIdKey (string $userId): string {
         return "users.{$userId}.transactions.amount";
     }
 
@@ -73,7 +73,7 @@ class TransactionRepository {
      *
      * @param string $userId
      */
-    protected function forgetSumAmountByUserId (string $userId) {
+    private function forgetSumAmountByUserId (string $userId) {
         $this->forget($this->buildSumAmountByUserIdKey($userId));
     }
 
@@ -84,7 +84,7 @@ class TransactionRepository {
      * @param \Closure $callback
      * @return mixed
      */
-    protected function cacheSumAmountByUserId (string $userId, Closure $callback) {
+    private function cacheSumAmountByUserId (string $userId, Closure $callback) {
         return $this->cache($this->buildSumAmountByUserIdKey($userId), $callback);
     }
 
@@ -178,5 +178,9 @@ class TransactionRepository {
         return $this->cacheSumAmountByUserId($userId, function () use ($userId) {
             return $this->rawRumAmountByUserId($userId);
         });
+    }
+
+    public function getTransactionOwnerId (string $transactionId): string {
+        return Transaction::where('id', $transactionId)->value('user_id');
     }
 }

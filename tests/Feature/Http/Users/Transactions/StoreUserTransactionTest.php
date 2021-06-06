@@ -37,6 +37,18 @@ class StoreUserTransactionTest extends TestCase {
     }
 
     /**
+     * Test if store transaction responds with 201 status code.
+     */
+    public function testStoreUserTransactionRespondsWithForbidden () {
+        $another = $this->createDummyUser();
+
+        $transaction = $this->makeDummyTransaction()->toArray();
+
+        $this->postJson("/api/users/{$another->id}/transactions", $transaction)
+            ->assertForbidden();
+    }
+
+    /**
      * Test if store transaction responds with valid structure.
      */
     public function testStoreUserTransactionRespondsWithValidStructure () {

@@ -32,18 +32,20 @@ class DestroyTransactionTest extends TestCase {
     public function testDestroyTransactionRespondsWithOk () {
         $transaction = $this->createDummyTransactionTo($this->user->id);
 
-        $response = $this->deleteJson("/api/transactions/$transaction->id");
-
-        $response->assertOk();
+        $this->deleteJson("/api/transactions/$transaction->id")
+            ->assertOk();
     }
 
     /**
-     * Test if destroy transaction responds with 404 status code if it does not exist.
+     * Test if destroy transaction responds with forbidden if try to destroy another user's transaction.
      */
-    public function testDestroyTransactionRespondsWithNotFound () {
-        $response = $this->deleteJson("/api/transactions/transaction-doesnt-exist");
+    public function testDestroyTransactionRespondsWithForbidden () {
+        $another = $this->createDummyUser();
 
-        $response->assertNotFound();
+        $transaction = $this->createDummyTransactionTo($another->id);
+
+        $this->deleteJson("/api/transactions/$transaction->id")
+            ->assertForbidden();
     }
 
     /**

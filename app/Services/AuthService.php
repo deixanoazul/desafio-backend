@@ -19,6 +19,24 @@ class AuthService {
     }
 
     /**
+     * Get current user id.
+     *
+     * @return string
+     */
+    public function getCurrentUserId (): string {
+        return $this->auth->guard()->id();
+    }
+
+    /**
+     * Check if the specified user id is the current user id.
+     *
+     * @return string
+     */
+    public function isCurrentUserId (string $userId): string {
+        return $userId === $this->getCurrentUserId();
+    }
+
+    /**
      * Sign user into the application if credentials are valid.
      *
      * @throws \App\Exceptions\Auth\InvalidCredentialsException

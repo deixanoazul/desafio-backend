@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\Users\ForbiddenUserUpdate;
 use App\Exceptions\Users\UserHasBalanceException;
 use App\Exceptions\Users\UserHasTransactionException;
 use App\Repositories\TransactionRepository;
@@ -16,24 +17,34 @@ class UserService {
      */
     const MINIMUM_AGE = 21;
 
+
+    /**
+     * The auth service.
+     *
+     * @var \App\Services\AuthService
+     */
+    private $auth;
+
     /**
      * The user repository.
      *
      * @var \App\Repositories\UserRepository
      */
-    protected $users;
+    private $users;
 
     /**
      * The transaction repository.
      *
      * @var
      */
-    protected $transactions;
+    private $transactions;
 
     public function __construct (
+        AuthService $auth,
         UserRepository $users,
         TransactionRepository $transactions
     ) {
+        $this->auth = $auth;
         $this->users = $users;
         $this->transactions = $transactions;
     }
@@ -44,7 +55,7 @@ class UserService {
      * @param string $birthdate
      * @return mixed
      */
-    protected function isUnderage (string $birthdate): bool {
+    private function isUnderage (string $birthdate): bool {
         $birthdate = Carbon::parse($birthdate);
 
         return $birthdate->age < UserService::MINIMUM_AGE;
@@ -54,7 +65,7 @@ class UserService {
      * @throws \App\Exceptions\Users\UserHasBalanceException
      * @throws \App\Exceptions\Users\UserHasTransactionException
      */
-    protected function assertCanDelete (string $userId) {
+    private function assertCanDelete (string $userId): void {
         if ($this->hasBalanceById($userId)) {
             throw new UserHasBalanceException();
         }
@@ -69,11 +80,23 @@ class UserService {
      *
      * @throws \App\Exceptions\Users\UnderageUserException
      */
-    protected function assertCanCreate (array $attributes) {
+    private function assertCanCreate (array $attributes): void {
         $birthdate = $attributes['birthdate'];
 
         if ($this->isUnderage($birthdate)) {
             throw new UnderageUserException();
+        }
+    }
+
+    /**
+     * Assert can update user.
+     *
+     * @param string $userId
+     * @throws \App\Exceptions\Users\ForbiddenUserUpdate
+     */
+    private function assertCanUpdate (string $userId): void {
+        if (!$this->auth->isCurrentUserId($userId)) {
+            throw new ForbiddenUserUpdate();
         }
     }
 
@@ -83,11 +106,11 @@ class UserService {
      * @param string $userId
      * @return bool
      */
-    protected function hasBalanceById (string $userId): bool {
+    private function hasBalanceById (string $userId): bool {
         return $this->users->getBalanceById($userId) > 0;
     }
 
-    protected function hasTransactionById (string $userId): bool {
+    private function hasTransactionById (string $userId): bool {
         return $this->transactions->existsByUserId($userId);
     }
 
@@ -127,6 +150,8 @@ class UserService {
      * @return mixed
      */
     public function update (array $attributes, string $userId) {
+        $this->assertCanUpdate($userId);
+
         return $this->users->updateById($attributes, $userId);
     }
 
