@@ -7,9 +7,7 @@ use App\Traits\HasPassword;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -53,14 +51,4 @@ class User extends Model implements AuthenticatableContract, JWTSubject {
     public function getJWTCustomClaims (): array {
         return [];
     }
-
-    /**
-     * Get the transactions of this user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function transactions (): HasMany {
-        return $this->hasMany(Transaction::class);
-    }
-
 }
