@@ -3,15 +3,90 @@
 namespace App\Repositories;
 
 use App\Models\Transaction;
-use App\Exceptions\Transactions\TransactionNotFoundException;
 
+use Closure;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class TransactionRepository {
     /**
+     * The cache time to live in seconds.
+     */
+    private const CACHE_TTL = 5;
+
+    /**
      * The number of transactions per page.
      */
-    const PER_PAGE = 15;
+    private const PER_PAGE = 15;
+
+    /**
+     * Get user id from transaction.
+     *
+     * @param \App\Models\Transaction $transaction
+     * @return string
+     */
+    protected function getUserId (Transaction $transaction): string {
+        return $transaction->user_id;
+    }
+
+    /**
+     * Get cache time to live.
+     *
+     * @return int
+     */
+    protected function getCacheTimeToLive (): int {
+        return TransactionRepository::CACHE_TTL;
+    }
+
+    /**
+     * Cache transaction query key.
+     *
+     * @param string $key
+     * @param \Closure $callback
+     * @return mixed
+     */
+    protected function cache (string $key, \Closure $callback) {
+        return Cache::remember($key, $this->getCacheTimeToLive(), $callback);
+    }
+
+    /**
+     * Forget cached transaction query.
+     *
+     * @param string $key
+     */
+    protected function forget (string $key) {
+        Cache::forget($key);
+    }
+
+    /**
+     * Build sum amount by user id key.
+     *
+     * @param string $userId
+     * @return string
+     */
+    protected function buildSumAmountByUserIdKey (string $userId): string {
+        return "users.{$userId}.transactions.amount";
+    }
+
+    /**
+     * Forget sum amount by user id.
+     *
+     * @param string $userId
+     */
+    protected function forgetSumAmountByUserId (string $userId) {
+        $this->forget($this->buildSumAmountByUserIdKey($userId));
+    }
+
+    /**
+     * Cache sum amount by user id.
+     *
+     * @param string $userId
+     * @param \Closure $callback
+     * @return mixed
+     */
+    protected function cacheSumAmountByUserId (string $userId, Closure $callback) {
+        return $this->cache($this->buildSumAmountByUserIdKey($userId), $callback);
+    }
 
     /**
      * Get all transactions with pagination.
@@ -45,6 +120,8 @@ class TransactionRepository {
 
         $transaction->user()->associate($userId)->save();
 
+        $this->forgetSumAmountByUserId($userId);
+
         return $transaction;
     }
 
@@ -60,15 +137,15 @@ class TransactionRepository {
 
     /**
      * Delete a transaction by id.
-     *
-     * @throws \App\Exceptions\Transactions\TransactionNotFoundException
      */
     public function deleteById (string $transactionId) {
-        $deleted = Transaction::where('id', $transactionId)->delete();
+        $transaction = Transaction::findOrFail($transactionId);
 
-        if ($deleted === 0) {
-            throw new TransactionNotFoundException();
-        }
+        $transaction->delete();
+
+        $this->forgetSumAmountByUserId(
+            $this->getUserId($transaction)
+        );
     }
 
     /**
@@ -82,12 +159,24 @@ class TransactionRepository {
     }
 
     /**
-     * Sum transaction amounts by user id.
+     * Sum amount by user id without cache.
+     *
+     * @param string $userId
+     * @return int
+     */
+    private function rawRumAmountByUserId (string $userId): int {
+        return Transaction::where('user_id', $userId)->sum('amount');
+    }
+
+    /**
+     * Sum amount by user id with cache.
      *
      * @param string $userId
      * @return int
      */
     public function sumAmountByUserId (string $userId): int {
-        return Transaction::where('user_id', $userId)->sum('amount');
+        return $this->cacheSumAmountByUserId($userId, function () use ($userId) {
+            return $this->rawRumAmountByUserId($userId);
+        });
     }
 }

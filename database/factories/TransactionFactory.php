@@ -7,7 +7,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Transaction::class, function (Faker $faker) {
     return [
-        'amount' => $faker->numberBetween(0, 1000),
+        'amount' => $faker->numberBetween(1, 1000),
         'type' => $faker->randomElement(['debit', 'credit', 'reversal']),
     ];
 });
