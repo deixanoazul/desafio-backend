@@ -12,7 +12,17 @@ Para executar esse projeto, será necessário ter **PHP** 7.4 e **Composer** 2.0
 $ composer install
 ```
 
-Uma chave JWT será gerada automaticamente quando a instalação for finalizada. Além disso, será configurado uma base de dados SQLite para facilitar a utilização da aplicação.
+Para gerar uma chave para a aplicação:
+
+```bash
+$ php artisan key:generate
+```
+
+Para gerar uma chave JWT de autenticação:
+
+```bash
+$ php artisan jwt:secret
+```
 
 ## Começar :running:
 
