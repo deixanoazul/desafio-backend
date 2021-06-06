@@ -23,15 +23,13 @@ class StoreUserTransactionTest extends TestCase {
     public function setUp (): void {
         parent::setUp();
 
-        $this->user =  $this->createDummyUser();
+        $this->user = $this->actingAsDummyUser();
     }
 
     /**
      * Test if store transaction responds with 201 status code.
      */
     public function testStoreUserTransactionRespondsWithCreated () {
-        $this->actingAs($this->user);
-
         $transaction = $this->makeDummyTransaction()->toArray();
 
         $this->postJson("/api/users/{$this->user->id}/transactions", $transaction)
@@ -42,8 +40,6 @@ class StoreUserTransactionTest extends TestCase {
      * Test if store transaction responds with valid structure.
      */
     public function testStoreUserTransactionRespondsWithValidStructure () {
-        $this->actingAs($this->user);
-
         $transaction = $this->makeDummyTransaction()->toArray();
 
         $this->postJson("/api/users/{$this->user->id}/transactions", $transaction)

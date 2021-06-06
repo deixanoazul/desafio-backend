@@ -23,7 +23,7 @@ class DestroyTransactionTest extends TestCase {
     public function setUp (): void {
         parent::setUp();
 
-        $this->user = $this->createDummyUser();
+        $this->user = $this->actingAsDummyUser();
     }
 
     /**
@@ -33,8 +33,6 @@ class DestroyTransactionTest extends TestCase {
         $transaction = $this->createDummyTransactionTo($this->user->id);
 
         $response = $this->deleteJson("/api/transactions/$transaction->id");
-
-        $response->dump();
 
         $response->assertOk();
     }

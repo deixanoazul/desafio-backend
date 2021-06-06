@@ -134,7 +134,6 @@ class UserService {
      * Delete user by id.
      *
      * @param string $userId
-     * @throws \App\Exceptions\Users\UserNotFoundException
      * @throws \App\Exceptions\Users\UserHasBalanceException
      * @throws \App\Exceptions\Users\UserHasTransactionException
      */

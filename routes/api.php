@@ -21,8 +21,7 @@ use App\Http\Controllers\Transactions\TransactionController;
 */
 
 Route::post('/sign-in', [AuthController::class, 'signIn']);
-Route::post('/sign-out', [AuthController::class, 'signOut'])
-    ->middleware('auth');
+Route::post('/sign-out', [AuthController::class, 'signOut']);
 
 Route::apiResource('users', UserController::class);
 

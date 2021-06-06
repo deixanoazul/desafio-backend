@@ -32,6 +32,8 @@ class UserTransactionController extends Controller {
     ) {
         $this->users = $users;
         $this->transactions = $transactions;
+
+        $this->middleware('auth')->only(['store']);
     }
 
     /**

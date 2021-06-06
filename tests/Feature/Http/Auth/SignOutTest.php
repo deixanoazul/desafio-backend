@@ -11,13 +11,6 @@ class SignOutTest extends TestCase {
     use DatabaseMigrations,
         HasDummyUser;
 
-    /**
-     * The dummy user.
-     *
-     * @var \App\Models\User
-     */
-    private $user;
-
     public function setUp (): void {
         parent::setUp();
 

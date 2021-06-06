@@ -17,18 +17,6 @@ trait HasDummyUser {
     }
 
     /**
-     * Create dummy user without balance.
-     *
-     * @param array $attributes
-     * @return \App\Models\User
-     */
-    public function createDummyUserWithoutBalance (array $attributes = []): User {
-        return factory(User::class)
-            ->state('without-balance')
-            ->create($attributes);
-    }
-
-    /**
      * Create dummy users.
      *
      * @param int $times
@@ -36,5 +24,19 @@ trait HasDummyUser {
      */
     public function createDummyUsers (int $times): Collection {
         return factory(User::class, $times)->create();
+    }
+
+    /**
+     * Create an dummy user and make it current user.
+     *
+     * @param array $attributes
+     * @return \App\Models\User
+     */
+    protected function actingAsDummyUser (array $attributes = []): User {
+        $user = $this->createDummyUser($attributes);
+
+        $this->actingAs($user);
+
+        return $user;
     }
 }

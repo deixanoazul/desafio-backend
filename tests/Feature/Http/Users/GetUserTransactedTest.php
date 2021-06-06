@@ -14,6 +14,19 @@ class GetUserTransactedTest extends TestCase {
         HasDummyTransaction;
 
     /**
+     * The dummy user.
+     *
+     * @var \App\Models\User
+     */
+    private $user;
+
+    public function setUp (): void {
+        parent::setUp();
+
+        $this->user = $this->actingAsDummyUser();
+    }
+
+    /**
      * Get dummy transaction payload with amount.
      *
      * @param int $amount
@@ -30,9 +43,7 @@ class GetUserTransactedTest extends TestCase {
      * Test if user transacted responds with 200 status code.
      */
     public function testUserTransactedRespondsWithOk () {
-        $user = $this->createDummyUser();
-
-        $this->getJson("/api/users/$user->id/transacted")
+        $this->getJson("/api/users/{$this->user->id}/transacted")
             ->assertOk();
     }
 
@@ -40,31 +51,26 @@ class GetUserTransactedTest extends TestCase {
      * Test if user transacted responds total transacted by user.
      */
     public function testUserTransactedRespondsWithTotalTransactedByUser () {
-        $user = $this->createDummyUser();
+        $transactions = $this->createDummyTransactionsTo(10, $this->user->id);
 
-        $transactions = $this->createDummyTransactionsTo(10, $user->id);
+        $transacted = $transactions->sum('amount');
 
-        $this->getJson("/api/users/$user->id/transacted")
-            ->assertJson([
-                'data' => [
-                    'transacted' => $transactions->sum('amount'),
-                ]
-            ]);
+        $this->getJson("/api/users/{$this->user->id}/transacted")
+            ->assertJsonPath('data.transacted', $transacted);
     }
 
     /**
      * Test if user transacted responds with updated value after transaction is created.
      */
     public function testUserTransactedRespondsWithUpdatedValueAfterTransactionIsCreated () {
-        $user = $this->createDummyUser();
         $payload = $this->getDummyTransactionPayloadWithAmount(1000);
 
-        $this->getJson("/api/users/{$user->id}/transacted")
+        $this->getJson("/api/users/{$this->user->id}/transacted")
             ->assertJsonPath('data.transacted', 0);
 
-        $this->postJson("/api/users/{$user->id}/transactions", $payload);
+        $this->postJson("/api/users/{$this->user->id}/transactions", $payload);
 
-        $this->getJson("/api/users/{$user->id}/transacted")
+        $this->getJson("/api/users/{$this->user->id}/transacted")
             ->assertJsonPath('data.transacted', 1000);
     }
 
@@ -72,18 +78,17 @@ class GetUserTransactedTest extends TestCase {
      * Test if user transacted responds with updated value after transaction is deleted.
      */
     public function testUserTransactedRespondsWithUpdatedValueAfterTransactionIsDeleted () {
-        $user = $this->createDummyUser();
         $payload = $this->getDummyTransactionPayloadWithAmount(1000);
 
-        $transactionId = $this->postJson("/api/users/{$user->id}/transactions", $payload)
+        $transactionId = $this->postJson("/api/users/{$this->user->id}/transactions", $payload)
             ->json('data.id');
 
-        $this->getJson("/api/users/{$user->id}/transacted")
+        $this->getJson("/api/users/{$this->user->id}/transacted")
             ->assertJsonPath('data.transacted', 1000);
 
         $this->deleteJson("/api/transactions/{$transactionId}");
 
-        $this->getJson("/api/users/{$user->id}/transacted")
+        $this->getJson("/api/users/{$this->user->id}/transacted")
             ->assertJsonPath('data.transacted', 0);
     }
 
@@ -91,9 +96,7 @@ class GetUserTransactedTest extends TestCase {
      * Test if user transacted responds with additional user info.
      */
     public function testUserTransactedRespondsWithAdditionalUserInfo () {
-        $user = $this->createDummyUser();
-
-        $this->getJson("/api/users/{$user->id}/transacted")
+        $this->getJson("/api/users/{$this->user->id}/transacted")
             ->assertJsonStructure([
                 'user'
             ]);

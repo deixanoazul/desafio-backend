@@ -11,6 +11,19 @@ class UpdateUserTest extends TestCase {
         HasDummyUser;
 
     /**
+     * The dummy user.
+     *
+     * @var \App\Models\User
+     */
+    private $user;
+
+    public function setUp (): void {
+        parent::setUp();
+
+        $this->user = $this->actingAsDummyUser();
+    }
+
+    /**
      * Get dummy update payload.
      *
      * @return array
@@ -26,21 +39,27 @@ class UpdateUserTest extends TestCase {
      * Test if update user responds with ok.
      */
     public function testUpdateUserRespondsWithOk () {
-        $user = $this->createDummyUser();
-
-        $this->patchJson("/api/users/{$user->id}")
+        $this->patchJson("/api/users/{$this->user->id}")
             ->assertOk();
+    }
+
+    /**
+     * Test if update user responds with forbidden if try to update another user.
+     */
+    public function testUpdateUserRespondsWithForbiddenIfTryToUpdateAnotherUser () {
+        $another = $this->createDummyUser();
+
+        $this->patchJson("/api/users/{$another->id}")
+            ->assertForbidden();
     }
 
     /**
      * Test if update user responds with updated attributes.
      */
     public function testUpdateUserRespondsWithUpdatedAttributes () {
-        $user = $this->createDummyUser();
-
         $payload = $this->getDummyUpdatePayload();
 
-        $this->patchJson("/api/users/{$user->id}", $payload)
+        $this->patchJson("/api/users/{$this->user->id}", $payload)
             ->assertJson([
                 'data' => [
                     'name' => $payload['name'],

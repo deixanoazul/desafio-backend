@@ -16,6 +16,8 @@ class TransactionController extends Controller {
 
     public function __construct (TransactionService $service) {
         $this->service = $service;
+
+        $this->middleware('auth')->only(['destroy']);
     }
 
     /**
@@ -45,7 +47,6 @@ class TransactionController extends Controller {
      * Destroy a transaction by id.
      *
      * @param string $transactionId
-     * @throws \App\Exceptions\Transactions\TransactionNotFoundException
      */
     public function destroy (string $transactionId) {
         $this->service->delete($transactionId);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Users;
 
+use App\Http\Requests\Users\DeleteUserRequest;
 use App\Services\UserService;
 
 use App\Http\Resources\UserResource;
@@ -52,6 +53,7 @@ class UserController extends Controller {
      *
      * @param \App\Http\Requests\Users\StoreUserRequest $request
      * @return \App\Http\Resources\UserResource
+     * @throws \App\Exceptions\Users\UnderageUserException
      */
     public function store (StoreUserRequest $request): UserResource {
         $user = $this->service->create(
@@ -61,6 +63,13 @@ class UserController extends Controller {
         return UserResource::make($user);
     }
 
+    /**
+     * Handle update user request.
+     *
+     * @param \App\Http\Requests\Users\UpdateUserRequest $request
+     * @param string $userId
+     * @return \App\Http\Resources\UserResource
+     */
     public function update (UpdateUserRequest $request, string $userId): UserResource {
         $user = $this->service->update($request->validated(), $userId);
 
@@ -70,10 +79,12 @@ class UserController extends Controller {
     /**
      * Handle destroy user request.
      *
+     * @param \App\Http\Requests\Users\DeleteUserRequest $request
      * @param string $userId
-     * @throws \App\Exceptions\Users\UserNotFoundException
+     * @throws \App\Exceptions\Users\UserHasBalanceException
+     * @throws \App\Exceptions\Users\UserHasTransactionException
      */
-    public function destroy (string $userId): void {
+    public function destroy (DeleteUserRequest $request, string $userId): void {
         $this->service->delete($userId);
     }
 }

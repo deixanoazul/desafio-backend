@@ -3,8 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\User;
-use App\Exceptions\Users\UserNotFoundException;
-
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class UserRepository {
@@ -62,14 +60,9 @@ class UserRepository {
      * Delete user by id.
      *
      * @param string $userId
-     * @throws \App\Exceptions\Users\UserNotFoundException
      */
     public function deleteById (string $userId): void {
-        $deleted = User::where('id', $userId)->delete();
-
-        if ($deleted === 0) {
-            throw new UserNotFoundException();
-        }
+        User::where('id', $userId)->delete();
     }
 
     /**

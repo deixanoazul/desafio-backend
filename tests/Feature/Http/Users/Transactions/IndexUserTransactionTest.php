@@ -23,15 +23,13 @@ class IndexUserTransactionTest extends TestCase {
     public function setUp (): void {
         parent::setUp();
 
-        $this->user = $this->createDummyUser();
+        $this->user = $this->actingAsDummyUser();
     }
 
     /**
      * Test if index transactions responds with 200 status code.
      */
     public function testIndexUserTransactionsRespondsWithOk () {
-        $this->actingAs($this->user);
-
         $this->getJson("/api/users/{$this->user->id}/transactions")
             ->assertOk();
     }
@@ -40,8 +38,6 @@ class IndexUserTransactionTest extends TestCase {
      * Test if index transactions responds with all transactions.
      */
     public function testIndexUserTransactionsRespondsWithAllTransactions () {
-        $this->actingAs($this->user);
-
         $this->createDummyTransactionsTo(10, $this->user->id);
 
         $this->getJson("/api/users/{$this->user->id}/transactions")
@@ -52,8 +48,6 @@ class IndexUserTransactionTest extends TestCase {
      * Test if index transactions responds with valid structure.
      */
     public function testIndexUserTransactionsRespondsWithValidStructure () {
-        $this->actingAs($this->user);
-
         $this->createDummyTransactionsTo(10, $this->user->id);
 
         $this->getJson("/api/users/{$this->user->id}/transactions")
@@ -75,8 +69,6 @@ class IndexUserTransactionTest extends TestCase {
      * Test if index transactions responds with additional user info.
      */
     public function testIndexUserTransactionsRespondsWithAdditionalUserInfo () {
-        $this->actingAs($this->user);
-
         $this->createDummyTransactionsTo(10, $this->user->id);
 
         $this->getJson("/api/users/{$this->user->id}/transactions")
