@@ -53,7 +53,7 @@ Nesta fase serão implementados as Transações e seus respectivos endpoints:
 - Criar um endpoint onde seja possível excluir uma transação relacionada a um usuário.
 
 
-### Fase 3 - Nova Funcionalidades
+### Fase 3 - Novas Funcionalidades
 Nessa fase serão implementadas novas funcionalidades no sistema:
 
 - Adicionar dentro do usuário um campo para saldo inicial, e criar um endpoint para alterar esse valor;
