@@ -19,6 +19,7 @@ Sua avaliação será dada pelas fases que conseguir entregar e a forma com que 
 - O código deve seguir o padrão PSR4;
 - Adicionar no README instruções de como executar o projeto.
 - A API deve receber e retornar dados no formato JSON.
+- Documentas as rotas.
 
 ## Diferenciais
 
